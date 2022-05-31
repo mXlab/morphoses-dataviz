@@ -108,3 +108,5 @@ dist
 index.js
 routes.js
 scripts/*.js
+
+.DS_STORE
