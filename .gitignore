@@ -103,13 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-
-### PROJECT SPECIFIC
-index.js
-routes.js
-scripts/*.js
-
-static/bundle.js
-static/main.css
-
+# macOS :/
 .DS_STORE
