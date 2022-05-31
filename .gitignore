@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+
+### PROJECT SPECIFIC
+index.js
+routes.js
+scripts/*.js
