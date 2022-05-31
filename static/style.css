@@ -1,0 +1,17 @@
+.container {
+    width: 300px;
+    height: 300px;
+    display: inline-block;
+    border: 1px solid black;
+    position: relative;
+}
+
+.ball {
+    position: absolute;
+    display: inline-block;
+    border-radius: 50%;
+    background: red;
+    width: 10px;
+    height: 10px;
+    transform: translate(-50%, -50%);
+}
