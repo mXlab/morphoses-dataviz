@@ -109,4 +109,7 @@ index.js
 routes.js
 scripts/*.js
 
+static/bundle.js
+static/main.css
+
 .DS_STORE
