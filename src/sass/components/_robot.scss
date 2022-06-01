@@ -7,15 +7,18 @@
 
     &__wrapper {
         display: flex;
+        column-gap: 48px;
     }
 
     .robot {
         position: absolute;
         display: inline-block;
         border-radius: 50%;
-        background: red;
         width: 10px;
         height: 10px;
         transform: translate(-50%, -50%);
+
+        &:nth-child(1) { background: red; }
+        &:nth-child(2) { background: blue; }
     }
 }

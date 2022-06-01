@@ -1,20 +1,26 @@
 import io from 'socket.io-client';
 
+import globals from '../globals';
+import GraphManager from '../managers/GraphManager';
 import { parseCoords } from '../utils';
 
-const NUM_ROBOTS = 3;
-const flagDebug = true;
+const flagDebug = false;
 
 export default class EventRegister {
-    static Init() {
+    static init() {
         // connect to socket.io
         EventRegister.socket = io();
         let _s = EventRegister.socket;
 
         // define callbacks
-        for (let i = 0; i <= NUM_ROBOTS; ++i) {
-            let tag = `robot${i}`;
+        globals.TAGS.forEach(tag => {
+            // get DOM node
             let el = document.querySelector(`#${tag}`);
+
+            
+            // -----******************-----
+            // ---- ABSOLUTE TO ITSELF ----
+            // -----******************-----
 
             // position
             _s.on(`${tag} pos`, args => {
@@ -53,10 +59,48 @@ export default class EventRegister {
                 if (flagDebug)
                     console.log(`${tag} rotation (motor)\n${parseCoords(args, "mr")}`);
             });
-        }
+
+            // TODO: reward
+            // (graphed in its own component possibly)
+            _s.on(`${tag} reward`, args => {
+                // console.log();
+                const g = GraphManager.get(`${tag} reward`);
+                if (!g) return;
+
+                g.addValue(args[0] * 50);
+            });
+
+            
+            // -----************************-----
+            // ---- RELATIVE TO OTHER BODIES ----
+            // -----************************-----
+
+            const otherTags = globals.TAGS.filter(t => t !== tag);
+            otherTags.forEach(other => {
+                // close (boolean)
+                _s.on(`${tag} close_${other}`, args => {
+                    // console.log(`${tag} close to ${other}`);
+                });
+                
+                // distance
+                _s.on(`${tag} dist_${other}`, args => {
+                    // console.log()
+                });
+
+                // angle
+                _s.on(`${tag} angle_${other}`, args => {
+                    // console.log();
+                });
+
+                // quadrant
+                _s.on(`${tag} quadrant_${other}`, args => {
+                    // console.log();
+                });
+            });
+        });
     }
 
-    static Emit(evt, args) {
+    static emit(evt, args) {
         const _s = EventRegister.socket;
         _s.emit(evt, args);
     }

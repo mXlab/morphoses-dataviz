@@ -11,7 +11,7 @@ class OSCToggle {
     onClick(e) {
         const {param} = e.currentTarget.dataset;
         const active = e.currentTarget.checked;
-        EventRegister.Emit("togsend", { param, active });
+        EventRegister.emit("togsend", { param, active });
     }
 }
 
