@@ -8,6 +8,7 @@ import { OscMessage, Route } from './scripts/types';
 // static classes
 import OscManager from './scripts/OscManager';
 import SocketManager from './scripts/SocketManager';
+import EventHandler from './scripts/EventHandler';
 // expressjs routes
 import routes from './routes';
 
@@ -20,12 +21,12 @@ const server = http.createServer(app);
 
 
 // static folder middleware
-app.use(express.static(path.join(__dirname, "static")));
+app.use(express.static(path.join(__dirname, "public")));
 
 // initialize route(s) and HTML service
 routes.forEach((route: Route) => {
     app.get(route.uri, (req, res) => {
-        res.sendFile(path.join(__dirname, `static/${route.file}.html`));
+        res.sendFile(path.join(__dirname, `public/${route.file}.html`));
     });
 });
 
@@ -34,9 +35,9 @@ routes.forEach((route: Route) => {
 SocketManager.start(server);
 // configure OSC server
 OscManager.start(
-    process.env.OSC_HOST,                                   // host
-    process.env.OSC_PORT,                                   // port
-    (msg: OscMessage) => SocketManager.io.emit(msg.address, msg.args),    // callback
+    process.env.OSC_HOST,       // host
+    process.env.OSC_PORT,       // port
+    EventHandler                // handler
 );
 
 
