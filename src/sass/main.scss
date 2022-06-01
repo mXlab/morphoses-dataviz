@@ -1,5 +1,9 @@
 // utils
 @import "utils/reset";
 
+// layout
+@import "layout/grid";
+@import "layout/headings";
+
 // components
-@import "components/2d"
+@import "components/robot"

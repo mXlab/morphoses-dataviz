@@ -1,11 +1,15 @@
-.container {
+.viewer {
     width: 300px;
     height: 300px;
     display: inline-block;
     border: 1px solid black;
     position: relative;
 
-    .ball {
+    &__wrapper {
+        display: flex;
+    }
+
+    .robot {
         position: absolute;
         display: inline-block;
         border-radius: 50%;

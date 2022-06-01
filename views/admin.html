@@ -8,9 +8,29 @@
 
     <body>
         <h1>Morphoses Admin</h1>
-        
-        <div class="container">
-            <div class="ball"></div>
+
+        <div class="viewer__wrapper">
+            <div class="viewer">
+                <div class="robot" id="robot1"></div>
+                <div class="robot" id="robot2"></div>
+            </div>
+    
+            <div class="sidebar">
+                <h2>debugger</h2>
+
+                <div>
+                    <input type="checkbox" class="toggle" data-param="robot1 pos" name="robot1pos" id="robot1pos">
+                    <label for="robot1pos">robot1 pos</label>
+                </div>
+                <div>
+                    <input type="checkbox" class="toggle" data-param="robot1 quat" name="robot1quat" id="robot1quat">
+                    <label for="robot1quat">robot1 quat</label>
+                </div>
+                <div>
+                    <input type="checkbox" class="toggle" data-param="robot1 rot" name="robot1rot" id="robot1rot">
+                    <label for="robot1rot">robot1 rot</label>
+                </div>
+            </div>
         </div>
 
         <script src="bundle.js"></script>

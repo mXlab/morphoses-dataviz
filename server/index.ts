@@ -2,6 +2,7 @@ import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
+const chalk = require("chalk");
 
 // types
 import { OscMessage, Route } from './scripts/types';
@@ -34,14 +35,15 @@ routes.forEach((route: Route) => {
 // configure socket.io
 SocketManager.start(server);
 // configure OSC server
-OscManager.start(
-    process.env.OSC_HOST,       // host
-    process.env.OSC_PORT,       // port
-    EventHandler                // handler
-);
+OscManager.start({
+    localAddress: process.env.OSCIN_HOST,       // in host
+    localPort: process.env.OSCIN_PORT,          // in port,
+    remoteAddress: process.env.OSCOUT_HOST,     // out host,
+    remotePort: process.env.OSCOUT_PORT         // out port
+}, EventHandler);
 
 
 // begin listening on http port
 server.listen(process.env.HTTP_PORT, () => {
-    console.log(`Example app listening on port ${process.env.HTTP_PORT}`);
+    console.log(chalk.bold.white.bgCyan('[HTTP]') + `\tlistening on\tlocalhost:${process.env.HTTP_PORT}`);
 });
