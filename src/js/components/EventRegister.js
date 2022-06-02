@@ -2,6 +2,7 @@ import io from 'socket.io-client';
 
 import globals from '../globals';
 import GraphManager from '../managers/GraphManager';
+import RobotManager from '../managers/RobotManager';
 import { parseCoords } from '../utils';
 
 const flagDebug = false;
@@ -14,10 +15,6 @@ export default class EventRegister {
 
         // define callbacks
         globals.TAGS.forEach(tag => {
-            // get DOM node
-            let el = document.querySelector(`#${tag}`);
-
-            
             // -----******************-----
             // ---- ABSOLUTE TO ITSELF ----
             // -----******************-----
@@ -29,17 +26,25 @@ export default class EventRegister {
                 if (flagDebug)
                     console.log(`${tag} pos\n${parseCoords(args)}`);
 
-                const pos = { x: args[0], y: args[1] };
-
-                // transform
-                el.style.top = `${(1 - pos.y) * 100}%`;
-                el.style.left = `${pos.x * 100}%`;
+                // get robot
+                const r = RobotManager.get(tag);
+                if (!r) return;
+                
+                // set position
+                r.setPosition(...args);
             });
 
             // orientation (quaternion)
             _s.on(`${tag} quat`, args => {
                 if (flagDebug)
                     console.log(`${tag} orientation\n${parseCoords(args, "q")}`);
+                
+                // get robot
+                const r = RobotManager.get(tag);
+                if (!r) return;
+
+                // set quaternion orientation
+                r.setOrientation(...args);
             });
 
             // rotation (euler)
@@ -58,6 +63,14 @@ export default class EventRegister {
             _s.on(`${tag} mrot`, args => {
                 if (flagDebug)
                     console.log(`${tag} rotation (motor)\n${parseCoords(args, "mr")}`);
+                
+                // get robot
+                const r = RobotManager.get(tag);
+                if (!r) return;
+
+                // set rotation
+                const mrz = args[2];
+                r.setDirection(mrz);
             });
 
             // TODO: reward
@@ -67,7 +80,7 @@ export default class EventRegister {
                 const g = GraphManager.get(`${tag} reward`);
                 if (!g) return;
 
-                g.addValue(args[0] * 50);
+                g.addValue(args[0]);
             });
 
             

@@ -18,7 +18,33 @@
         height: 10px;
         transform: translate(-50%, -50%);
 
-        &:nth-child(1) { background: red; }
-        &:nth-child(2) { background: blue; }
+        background: currentColor;
+
+        // orientation guide
+        &::after {
+            content: '';
+            background-color: currentColor;
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1px;
+            height: 150%;
+            transform: translateY(-75%) rotate(-90deg);
+        }
+
+        &__container {
+            width: calc(100% - 10px);
+            height: calc(100% - 10px);
+            padding: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            &:nth-child(1) { color: red; }
+            &:nth-child(2) { color: blue; }
+        }
     }
 }

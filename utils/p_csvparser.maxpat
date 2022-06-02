@@ -57,8 +57,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 55.5, 106.0, 33.0, 22.0 ],
-					"text" : "read"
+					"patching_rect" : [ 55.5, 106.0, 49.0, 22.0 ],
+					"text" : "read $1"
 				}
 
 			}
@@ -70,7 +70,7 @@
 					"maxclass" : "inlet",
 					"numinlets" : 0,
 					"numoutlets" : 1,
-					"outlettype" : [ "" ],
+					"outlettype" : [ "bang" ],
 					"patching_rect" : [ 55.5, 22.0, 30.0, 30.0 ]
 				}
 

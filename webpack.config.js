@@ -6,7 +6,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist/public'),
         filename: 'bundle.js'
     },
-    mode: 'production',
+    mode: 'development',
     
     watch: true,
     watchOptions: {
@@ -21,7 +21,7 @@ module.exports = {
                     loader: "babel-loader",
                     options: {
                         presets: ["@babel/preset-env"], // ensure compatibility with older browsers
-                        plugins: ["@babel/plugin-transform-object-assign"], // ensure compatibility with IE 11
+                        plugins: ["@babel/plugin-transform-object-assign", "@babel/plugin-proposal-function-bind"], // ensure compatibility with IE 11
                     },
                 },
               },
