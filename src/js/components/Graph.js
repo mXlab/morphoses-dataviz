@@ -1,53 +1,48 @@
 import CBuffer from 'CBuffer';
 import { SVG } from '@svgdotjs/svg.js';
-import Spline from 'cubic-spline';
+import anime from 'animejs';
 
-const ACCEL = 0.0001;
-const DECEL = 0.0001;
-const TOPSPEED = 0.0005;
+const defaults = {
+    width: 100,         // width of SVG
+    height: 50,         // height of SVG
+    domain: 10000,      // history in milliseconds
+    smooth: 5,          // smooth value
+}
 
 class Graph {
-    constructor(parent) {
+    constructor(parent, opts = {}) {
         // TODO: width dependent
         // TODO: cubic spline.......... for coarse value updates
         this.parent = parent;
+        this.opts = Object.assign(defaults, opts);
         
         // create circular buffers
         // one for each axis (x is the timestamp)
-        this.buffer = new CBuffer(100);
+        this.numPoints = this.opts.domain / 1000 * 60;
+        this.buffer = new CBuffer(this.numPoints);
         this.currY = 0.5;
         this.smoothY = 0.5;
         this.buffer.push(this.currY);
 
-        // smoothing props
-        this.velocity = 0;
 
         // props n flags
-        this.domain = 1000;         // in milliseconds, scaled to width
         this.allowRender = true;
 
         // create svg
-        this.svg = SVG().addTo(this.parent);
+        this.svg = SVG().size(this.opts.width, this.opts.height).addTo(this.parent);
         this.render();
     }
 
     render() {
         // delta y (also equals distance since 1d)
-        const deltaY = this.currY - this.smoothY;
-        const decelDistance = Math.pow(this.velocity,2) / (DECEL * 2);
-
-        if (Math.abs(deltaY) > decelDistance) {
-            this.velocity = Math.min(this.velocity + ACCEL, TOPSPEED);
-        } else {
-            this.velocity = Math.max(this.velocity - DECEL, 0);
-        }
-
-        this.smoothY += this.velocity;
-        
+        // complimented 
+        this.smoothY += (this.currY - this.smoothY) / Math.max(this.opts.smooth, 1);
         this.buffer.push(this.smoothY);
 
         //return;
-        const points = this.buffer.toArray().map((y, x) => [x, (1-y) * 50]);
+        const scaleX = this.opts.width / this.numPoints;
+        const scaleY = this.opts.height;
+        const points = this.buffer.toArray().map((y, x) => [x * scaleX, (1-y) * scaleY]);
 
         // clear and redraw
         this.svg.clear();
@@ -59,11 +54,16 @@ class Graph {
         requestAnimationFrame(this.render.bind(this));
     }
 
-    addValue(yPos) {
-        // ready value for smoothing
-        this.currY = yPos;
-
-        console.log(this.currY, this.smoothY);
+    addValue(currY) {
+        if (this.tween)
+            this.tween.pause();
+            
+        this.tween = anime({
+            targets: this,
+            currY,
+            duration: this.opts.smooth * 30,
+            easing: 'easeInQuad'
+        });
     }
 }
 

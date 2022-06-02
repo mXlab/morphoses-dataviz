@@ -16,7 +16,7 @@ window.onload = () => {
 
     // create one graph (for testing)
     // ID MATCHES OSC ROUTING PATTERN!!! IMPORTANT
-    GraphManager.create('robot1 reward', '.graph1');
+    GraphManager.create('robot1 reward', '.graph1', { width: 200, height: 75, slide: 10, domain: 5000 });
 
     // create robots
     RobotManager.create('robot1');

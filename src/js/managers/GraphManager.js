@@ -9,11 +9,11 @@ class GraphManager {
         GraphManager.instance = new GraphManager();
     }
 
-    static create(id, parent) {
+    static create(id, parent, opts) {
         const _this = GraphManager.instance;
 
         if (id in _this.graphs) return;
-        _this.graphs[id] = new Graph(parent);
+        _this.graphs[id] = new Graph(parent, opts);
     }
 
     static get(id) {
