@@ -9,11 +9,11 @@ class RobotManager {
         RobotManager.instance = new RobotManager();
     }
 
-    static create(id) {
+    static create(id, opts) {
         const _this = RobotManager.instance;
         
         if (id in _this.robots) return;
-        _this.robots[id] = new Robot(id, document.querySelector(`#${id}`));
+        _this.robots[id] = new Robot(id, document.querySelector(`#${id}`), opts);
     }
 
     static get(id) {

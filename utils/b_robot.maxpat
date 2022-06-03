@@ -744,7 +744,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 19.0, 382.291662931442261, 79.0, 22.0 ],
-					"text" : "pak 0. 0."
+					"text" : "pack 0. 0."
 				}
 
 			}

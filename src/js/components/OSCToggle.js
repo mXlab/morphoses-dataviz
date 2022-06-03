@@ -1,4 +1,4 @@
-import EventRegister from './EventRegister';
+import EventManager from '../managers/EventManager';
 
 class OSCToggle {
     constructor(el, opts) {
@@ -11,7 +11,7 @@ class OSCToggle {
     onClick(e) {
         const {param} = e.currentTarget.dataset;
         const active = e.currentTarget.checked;
-        EventRegister.emit("togsend", { param, active });
+        EventManager.emit("togsend", { param, active });
     }
 }
 

@@ -61,11 +61,11 @@ class QuatWidget {
         // x axis
         this.zAxis = new Line(new BufferGeometry().copy(circleGeo), new LineBasicMaterial({ color: 0x0000ff }));
 
-        this.xAxis = new Line(new BufferGeometry().copy(circleGeo), new LineBasicMaterial({ color: 0xff0000 }));
-        this.xAxis.rotateX(Math.PI / 2);
-
         this.yAxis = new Line(new BufferGeometry().copy(circleGeo), new LineBasicMaterial({ color: 0x00ff00 }));
-        this.yAxis.rotateY(Math.PI / 2);
+        this.yAxis.rotateX(Math.PI / 2);
+
+        this.xAxis = new Line(new BufferGeometry().copy(circleGeo), new LineBasicMaterial({ color: 0xff0000 }));
+        this.xAxis.rotateY(Math.PI / 2);
 
         
         this.widget.add(this.xAxis);
@@ -83,15 +83,10 @@ class QuatWidget {
         this.renderer.setPixelRatio(2);
         this.renderer.setSize(width, height);
         this.el.appendChild(this.renderer.domElement);
-
-
-        // start render
-        this.render();
     }
 
     render() {
         this.renderer.render(this.scene, this.camera);
-        requestAnimationFrame(this.render);
     }
 
     setOrientation(quaternion) {
