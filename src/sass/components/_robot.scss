@@ -1,14 +1,10 @@
-.viewer {
-    width: 300px;
-    height: 300px;
+.arena {
+    width: 600px;
+    height: 600px;
     display: inline-block;
     border: 1px solid black;
     position: relative;
-
-    &__wrapper {
-        display: flex;
-        column-gap: 48px;
-    }
+    overflow: hidden;
 
     .robot {
         position: absolute;
@@ -18,7 +14,7 @@
         height: 10px;
         transform: translate(-50%, -50%);
 
-        background: currentColor;
+        background-color: currentColor;
 
         // orientation guide
         &::after {

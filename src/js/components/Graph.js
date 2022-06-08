@@ -11,9 +11,11 @@ const defaults = {
 
 class Graph {
     constructor(parent, opts = {}) {
+        this.render = ::this.render;
+
         // TODO: width dependent
         // TODO: cubic spline.......... for coarse value updates
-        this.parent = parent;
+        this.parent = document.querySelector(parent);
         this.opts = Object.assign(defaults, opts);
         
         // create circular buffers
@@ -29,8 +31,22 @@ class Graph {
         this.allowRender = true;
 
         // create svg
-        this.svg = SVG().size(this.opts.width, this.opts.height).addTo(this.parent);
+        this.createCanvas();
+        
+        // render
         this.render();
+    }
+
+    createCanvas() {
+        this.canvas = document.createElement("canvas");
+        this.canvas.width = this.opts.width * window.devicePixelRatio;
+        this.canvas.height = this.opts.height * window.devicePixelRatio;
+        this.canvas.style.width = `${this.opts.width}px`;
+        this.canvas.style.height = `${this.opts.height}px`;
+        this.parent.appendChild(this.canvas);
+        
+        this.ctx = this.canvas.getContext('2d');
+        this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     }
 
     render() {
@@ -45,13 +61,17 @@ class Graph {
         const points = this.buffer.toArray().map((y, x) => [x * scaleX, (1-y) * scaleY]);
 
         // clear and redraw
-        this.svg.clear();
-        this.svg.polyline(points)
-            .fill('none')
-            .stroke({ width: 1, color: 'red' });
+        this.ctx.clearRect(0, 0, this.opts.width, this.opts.height);
+        this.ctx.strokeStyle = 'red';
+        this.ctx.beginPath();
+        for (let i = 0; i < this.numPoints; i++) {
+            if (points[i] === undefined) break;
+            this.ctx.lineTo(...points[i]);
+        }
+        this.ctx.stroke();
 
         // rerender @ 60fps
-        requestAnimationFrame(this.render.bind(this));
+        requestAnimationFrame(this.render);
     }
 
     addValue(currY) {

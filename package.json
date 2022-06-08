@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/netherwaves/morphoses-admin#readme",
   "dependencies": {
-    "@svgdotjs/svg.js": "^3.1.2",
     "animejs": "^3.2.1",
     "CBuffer": "^2.2.0",
     "cubic-spline": "^3.0.3",
