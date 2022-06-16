@@ -1,4 +1,5 @@
 import React from 'react';
+import SimpleBar from 'simplebar-react';
 
 class Panel extends React.Component {
     constructor(props) {
@@ -7,7 +8,11 @@ class Panel extends React.Component {
 
     render() {
         return (
-            <div className='panel'>{this.props.children}</div>
+            <div className='panel'>
+                <SimpleBar style={{ maxHeight: 600 }}>
+                    {this.props.children}
+                </SimpleBar>
+            </div>
         )
     }
 }

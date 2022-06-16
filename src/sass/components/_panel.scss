@@ -2,7 +2,10 @@
     width: 400px;
     position: relative;
 
-    padding-top: 16px;
+    // scrollbar stuff lol
+    .simplebar-content-wrapper {
+        padding-top: 16px;
+    }
 
     &::after {
         content: '';

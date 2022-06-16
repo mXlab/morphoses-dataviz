@@ -1,12 +1,6 @@
 import EventManager from "../managers/EventManager";
-import React, { useState } from "react";
-
-const defaults = {
-    title: "Value",
-    hasGraph: true,
-    labels: ["v"],
-    precision: 3,
-}
+import Graph from "./Graph"
+import React from "react";
 
 class Value extends React.Component {
     constructor(props) {
@@ -18,12 +12,11 @@ class Value extends React.Component {
             showGraph: false
         };
 
+        this.graphRef = React.createRef();
+
         // bindings
         this.toggleGraph = ::this.toggleGraph;
         this.onUpdate = ::this.onUpdate;
-
-        // options
-        this.opts = Object.assign(defaults, this.props.opts);
 
         // attach listener
         EventManager.plug(this.props.tag, this.onUpdate);
@@ -39,8 +32,14 @@ class Value extends React.Component {
         if (this.state.showGraph)
             valueClass += " graph-visible";
 
-        // TODO: set label class(?)
-        
+        let graph;
+        if (this.state.showGraph) {
+            graph = <Graph ref={this.graphRef} />;
+        } else {
+            graph = null;
+        }
+            
+        // rendar!!!!!!! :D
         return (
             <div className={valueClass} data-key={this.props.tag}>
                 <span className="label">{this.props.label}</span>
@@ -49,19 +48,25 @@ class Value extends React.Component {
                 <button className="show-graph" onClick={this.toggleGraph}>
                     <img src="/images/graph_icon.svg" alt="Toggle graph" />
                 </button>
+
+                {graph}
             </div>
         );
     }
 
     onUpdate(args) {
-        this.setState({
-            value: args[this.props.subtag].toFixed(this.opts.precision)
-        });
-        
-        // this.el.innerHTML = this.opts.labels
-        //     .map((label, i) => `${label}: ${data[i].toFixed(this.opts.precision)}`)
-        //     .join("<br>");
+        const value = args[this.props.subtag].toFixed(this.props.precision);
+
+        // set states
+        this.setState({ value });
+        if (this.graphRef.current) {
+            this.graphRef.current.addValue(value);
+        }
     }
+}
+
+Value.defaultProps = {
+    precision: 3
 }
 
 export default Value;
