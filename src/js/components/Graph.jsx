@@ -79,7 +79,7 @@ class Graph extends React.Component {
 Graph.defaultProps = {
     width: 135,                     // width of SVG
     height: 35,                     // height of SVG
-    domain: 5000,                   // history in milliseconds
+    domain: 10000,                  // history in milliseconds
     range: { min: 0, max: 1 },      // vertical/horizontal range
     smooth: 0,                      // smooth value
 };
