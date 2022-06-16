@@ -5,6 +5,7 @@
     border: 1px solid black;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
 
     .robot {
         position: absolute;
@@ -15,6 +16,14 @@
         transform: translate(-50%, -50%);
 
         background-color: currentColor;
+
+        &:hover {
+            opacity: 0.75;
+        }
+        &:active {
+            color: black !important;
+            opacity: 1 !important;
+        }
 
         // orientation guide
         &::after {

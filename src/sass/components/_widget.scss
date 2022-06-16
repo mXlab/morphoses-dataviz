@@ -1,0 +1,59 @@
+.widget {
+    padding: 0 16px 24px 28px;
+    position: relative;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid black;
+        margin-bottom: 16px;
+    }
+
+    &__toggle {
+        position: absolute;
+        top: 0;
+        left: -1px;
+        z-index: 0;
+        color: #04BF00;
+        width: 12px;
+        height: 80px;
+        border: 2px solid currentColor;
+        background-color: currentColor;
+
+        .disabled & {
+            background-color: transparent;
+            color: black;
+            opacity: 0.25;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .disabled & {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+    }
+
+    &__title {
+        font-size: 24px;
+    }
+
+    &__addr {
+        font-family: "Inconsolata", monospace;
+        opacity: 0.5;
+    }
+
+    &__values {
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+
+        .disabled & {
+            opacity: 0.25;
+            pointer-events: none;
+        }
+    }
+}

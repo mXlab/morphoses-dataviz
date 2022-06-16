@@ -1,12 +1,15 @@
 import CBuffer from 'CBuffer';
-import { SVG } from '@svgdotjs/svg.js';
 import anime from 'animejs';
+import { map_range } from '../utils';
+
+import React from 'react';
 
 const defaults = {
-    width: 100,         // width of SVG
-    height: 50,         // height of SVG
-    domain: 10000,      // history in milliseconds
-    smooth: 5,          // smooth value
+    width: 100,                     // width of SVG
+    height: 50,                     // height of SVG
+    domain: 10000,                  // history in milliseconds
+    range: { min: 0, max: 1 },      // vertical/horizontal range
+    smooth: 5,                      // smooth value
 }
 
 class Graph {
@@ -50,15 +53,15 @@ class Graph {
     }
 
     render() {
-        // delta y (also equals distance since 1d)
-        // complimented 
         this.smoothY += (this.currY - this.smoothY) / Math.max(this.opts.smooth, 1);
         this.buffer.push(this.smoothY);
 
-        //return;
         const scaleX = this.opts.width / this.numPoints;
         const scaleY = this.opts.height;
-        const points = this.buffer.toArray().map((y, x) => [x * scaleX, (1-y) * scaleY]);
+        const points = this.buffer.toArray().map((y, x) => [
+            x * scaleX,
+            map_range(y, this.opts.range.min, this.opts.range.max, 0, scaleY)
+        ]);
 
         // clear and redraw
         this.ctx.clearRect(0, 0, this.opts.width, this.opts.height);

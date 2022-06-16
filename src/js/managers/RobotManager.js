@@ -2,17 +2,20 @@ import Robot from '../components/Robot';
 
 class RobotManager {
     constructor() {
-        this.render = ::this.render;
+        // bindings
+        this.loop = ::this.loop;
         
+        // register
         this.robots = {};
 
+        // DOM
         this.arena = document.querySelector(".arena");
         this.width = this.arena.clientWidth;
         this.height = this.arena.clientHeight;
 
+        // init
         this.createCanvas();
-
-        this.render();
+        this.loop();
     }
 
     createCanvas() {
@@ -28,7 +31,7 @@ class RobotManager {
         this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     }
 
-    render() {
+    loop() {
         // clear canvas
         this.ctx.clearRect(0, 0, this.width, this.height);
 
@@ -37,7 +40,7 @@ class RobotManager {
             this.robots[r].render();
 
         // loop!
-        requestAnimationFrame(this.render);
+        requestAnimationFrame(this.loop);
     }
 
     static init() {
@@ -56,6 +59,10 @@ class RobotManager {
 
         if (!(id in _this.robots)) return;
         return _this.robots[id];
+    }
+
+    static renderDOM(root) {
+        root.render();
     }
 }
 

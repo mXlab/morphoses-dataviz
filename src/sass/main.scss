@@ -1,5 +1,6 @@
 // utils
 @import "utils/reset";
+@import "utils/fonts";
 
 // layout
 @import "layout/grid";
@@ -8,5 +9,7 @@
 
 // components
 @import "components/robot";
-@import "components/graph";
-@import "components/three";
+@import "components/controls";
+@import "components/panel";
+@import "components/widget";
+@import "components/value";

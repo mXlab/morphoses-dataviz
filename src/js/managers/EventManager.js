@@ -1,10 +1,5 @@
 import io from 'socket.io-client';
 
-import GraphManager from './GraphManager';
-import RobotManager from './RobotManager';
-import globals from '../globals';
-import { parseCoords } from '../utils';
-
 export default class EventManager {
     constructor() {
         this.flagDebug = false;

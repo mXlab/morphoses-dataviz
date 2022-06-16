@@ -1,0 +1,42 @@
+.value {
+    display: flex;
+    column-gap: 0.5rem;
+    align-items: center;
+
+    .label {
+        width: 20px;
+        font-size: 16px;
+    }
+
+    .number {
+        width: 100px;
+        height: 35px;
+        border: 1px solid black;
+        padding-left: 0.5rem;
+        font-size: 20px;
+        font-family: "Inconsolata", monospace;
+        font-weight: bold;
+        
+        display: flex;
+        align-items: center;
+    }
+
+    .show-graph {
+        background-color: transparent;
+        outline: none;
+        border: none;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &:active {
+            opacity: 0.5;
+        }
+
+        > img {
+            display: block;
+        }
+    }
+}

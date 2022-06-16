@@ -15,14 +15,17 @@ class Robot {
         this.setPosition = ::this.setPosition;
         this.setDirection = ::this.setDirection;
         this.setOrientation = ::this.setOrientation;
+        this.onClick = ::this.onClick;
 
         // props
         this.id = id;
         this.canvas = canvas;
         this.opts = Object.assign(defaults, opts);
 
-        // create DOM
-        this.createDOM();
+        // more props
+        this.allowRender = true;
+        this.trailing = true;
+        this.size = 20;             // diameter
 
         // data
         this.pos = { x: 0.5, y: 0.5 };
@@ -31,9 +34,8 @@ class Robot {
         this.motorOrientation = { x: 0, y: 0, z: 1, w: 0 };
         this.motorRotation = { x: 0, y: 0, z: 0 };
 
-        // more props
-        this.allowRender = true;
-        this.trailing = true;
+        // create DOM
+        this.createDOM();
 
         // side components
         this.quatWidget = new QuatWidget();
@@ -51,17 +53,21 @@ class Robot {
         this.container.classList.add("robot__container");
         document.querySelector(".arena").appendChild(this.container);
 
-        this.widget = document.createElement("span");
+        this.widget = document.createElement("button");
         this.widget.classList.add("robot");
         this.widget.classList.add(this.id);
         this.container.appendChild(this.widget);
 
+        this.widget.addEventListener("click", this.onClick);
+
         this.widget.style.color = this.opts.color;
+        this.widget.style.width = this.size + "px";
+        this.widget.style.height = this.size + "px";
     }
 
     // set position of robot
     // (where they are)
-    setPosition([robotID, [x, y]]) {
+    setPosition({ x, y }) {
         this.pos.x = x;
         this.pos.y = y;
 
@@ -72,16 +78,20 @@ class Robot {
 
     // set direction of robot
     // (where they are looking)
-    setDirection([robotID, [mrx, mry, mrz]]) {
+    setDirection({ z:mrz }) {
         this.motorRotation.z = mrz;
     }
 
     // set quaternion
-    setOrientation([robotID, [qx, qy, qz, qw]]) {
+    setOrientation({ x:qx, y:qy, z:qz, w:qw }) {
         const quaternion = new Quaternion();
         quaternion.setFromAxisAngle(new Vector3(qx,qy,qz).normalize(), qw * Math.PI * 2);
 
         this.quatWidget.setOrientation(quaternion);
+    }
+
+    onClick(e) {
+        document.querySelector(".controls").classList.add("visible");
     }
 
     render() {
@@ -95,7 +105,7 @@ class Robot {
 
         // render widgets
         this.trail.render();
-        this.quatWidget.render();
+        //this.quatWidget.render();
     }
 }
 
