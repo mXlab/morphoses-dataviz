@@ -49,22 +49,7 @@ window.onload = () => {
     //RobotManager.render(root);
 
     controls.render(<>
-        <Panel id="robot1" name="Robot 1">
-            <Widget name="Position" addr="/robot1/pos">
-                <Value tag="robot1 pos" subtag="x" label="X"></Value>
-                <Value tag="robot1 pos" subtag="y" label="Y"></Value>
-            </Widget>
-            <Widget name="Quaternion" addr="/robot1/quat">
-                <Value tag="robot1 quat" subtag="x" label="X"></Value>
-                <Value tag="robot1 quat" subtag="y" label="Y"></Value>
-                <Value tag="robot1 quat" subtag="z" label="Z"></Value>
-                <Value tag="robot1 quat" subtag="w" label="W"></Value>
-            </Widget>
-            <Widget name="Rotation" addr="/robot1/rot">
-                <Value tag="robot1 rot" subtag="x" label="X"></Value>
-                <Value tag="robot1 rot" subtag="y" label="Y"></Value>
-                <Value tag="robot1 rot" subtag="z" label="Z"></Value>
-            </Widget>
-        </Panel>
+        <Panel id="robot1" name="Robot 1"></Panel>
+        <Panel id="robot2" name="Robot 2"></Panel>
     </>);
 }

@@ -17,13 +17,19 @@ class Value extends React.Component {
         // bindings
         this.toggleGraph = ::this.toggleGraph;
         this.onUpdate = ::this.onUpdate;
-
-        // attach listener
-        EventManager.plug(this.props.tag, this.onUpdate);
     }
 
     toggleGraph() {
         this.setState({ showGraph: !this.state.showGraph });
+    }
+
+    componentDidMount() {
+        // attach listener
+        EventManager.plug(this.props.tag, this.onUpdate);
+    }
+
+    componentWillUnmount() {
+        EventManager.unplug(this.props.tag, this.onUpdate);
     }
 
     render() {
@@ -34,7 +40,7 @@ class Value extends React.Component {
 
         let graph;
         if (this.state.showGraph) {
-            graph = <Graph ref={this.graphRef} />;
+            graph = <Graph ref={this.graphRef} initialValue={this.state.value} />;
         } else {
             graph = null;
         }
@@ -55,7 +61,7 @@ class Value extends React.Component {
     }
 
     onUpdate(args) {
-        const value = args[this.props.subtag].toFixed(this.props.precision);
+        const value = parseFloat(args[this.props.subparam].toFixed(this.props.precision));
 
         // set states
         this.setState({ value });
