@@ -1,26 +1,26 @@
 import { Vector3, Quaternion } from "three";
+import React from 'react';
+
 import QuatWidget from "./QuatWidget";
 import RobotTrail from "./RobotTrail";
-
+import Panel from './Panel';
 import EventManager from '../managers/EventManager';
-
-const defaults = {
-    color: "black"
-};
+import RobotWidget from "./RobotWidget";
 
 class Robot {
-    constructor(id, canvas, opts) {
+    constructor(id, canvas, name, color = "black") {
         // bindings
-        this.render = ::this.render;
         this.setPosition = ::this.setPosition;
         this.setDirection = ::this.setDirection;
         this.setOrientation = ::this.setOrientation;
         this.onClick = ::this.onClick;
+        this.setVisibility = ::this.setVisibility;
 
-        // props
         this.id = id;
         this.canvas = canvas;
-        this.opts = Object.assign(defaults, opts);
+        this.name = name;
+        this.color = color;
+        this.visible = true;
 
         // more props
         this.allowRender = true;
@@ -34,42 +34,25 @@ class Robot {
         this.motorOrientation = { x: 0, y: 0, z: 1, w: 0 };
         this.motorRotation = { x: 0, y: 0, z: 0 };
 
-        // create DOM
-        this.createDOM();
-
         // side components
-        this.quatWidget = new QuatWidget();
-        this.trail = new RobotTrail(this.canvas, this.opts.color);
+        //this.quatWidget = new QuatWidget();
+        this.trail = new RobotTrail(
+            this.canvas.width / devicePixelRatio,
+            this.canvas.height / devicePixelRatio,
+            this.color
+        );
 
         // plug events
         EventManager
             .plug(`${this.id} pos`, this.setPosition)
-            .plug(`${this.id} quat`, this.setOrientation)
+            //.plug(`${this.id} quat`, this.setOrientation)
             .plug(`${this.id} mrot`, this.setDirection);
-    }
-
-    createDOM() {
-        this.container = document.createElement("div");
-        this.container.classList.add("robot__container");
-        document.querySelector(".arena").appendChild(this.container);
-
-        this.widget = document.createElement("button");
-        this.widget.classList.add("robot");
-        this.widget.classList.add(this.id);
-        this.container.appendChild(this.widget);
-
-        this.widget.addEventListener("click", this.onClick);
-
-        this.widget.style.color = this.opts.color;
-        this.widget.style.width = this.size + "px";
-        this.widget.style.height = this.size + "px";
     }
 
     // set position of robot
     // (where they are)
     setPosition({ x, y }) {
-        this.pos.x = x;
-        this.pos.y = y;
+        this.pos = { x, y };
 
         if (this.trailing) {
             this.trail.push(this.pos);
@@ -90,22 +73,29 @@ class Robot {
         this.quatWidget.setOrientation(quaternion);
     }
 
-    onClick(e) {
-        document.querySelector(".controls").classList.add("visible");
+    setVisibility() {
+        this.visible = !this.visible;
     }
 
-    render() {
-        if (!this.allowRender)
-            return;
+    onClick(e) {
+    }
 
-        this.container.style.color = this.opts.color;
-        this.container.style.transform = `translate3d(${this.pos.x * 100}%, ${(1 - this.pos.y) * 100}%, 1px)`;
-        // TODO: define horizon (what/where is 0 degrees of rotation?)
-        this.widget.style.transform = `translate(-50%, -50%) rotate(${(((1 - this.motorRotation.z) * 360) + 90) % 360}deg)`;
+    getPanel() {
+        return <Panel key={this.id + '--panel'} id={this.id} name={this.name} color={this.color} />;
+    }
 
-        // render widgets
-        this.trail.render();
-        //this.quatWidget.render();
+    getWidget() {
+        return <RobotWidget
+            key={this.id + '--widget'}
+            pos={this.pos}
+            color={this.color}
+            mrz={this.motorRotation.z}
+            size={this.size}
+        />
+    }
+
+    getTrail() {
+        return this.trail;
     }
 }
 

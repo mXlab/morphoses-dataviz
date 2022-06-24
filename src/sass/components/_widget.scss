@@ -23,6 +23,10 @@
             color: black;
             opacity: 0.25;
         }
+
+        .panel--collapsed & {
+            height: 45px;
+        }
     }
 
     &__header {
@@ -39,11 +43,19 @@
 
     &__title {
         font-size: 24px;
+
+        .panel--collapsed & {
+            font-size: 18px;
+        }
     }
 
     &__addr {
         font-family: "Inconsolata", monospace;
         opacity: 0.5;
+
+        .panel--collapsed & {
+            display: none;
+        }
     }
 
     &__values {
@@ -54,6 +66,11 @@
         .disabled & {
             opacity: 0.25;
             pointer-events: none;
+        }
+
+        .panel--collapsed & {
+            flex-direction: row;
+            column-gap: 8px;
         }
     }
 }

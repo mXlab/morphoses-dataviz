@@ -3,12 +3,11 @@ import CBuffer from "CBuffer";
 
 
 export default class RobotTrail {
-    constructor(canvas, color = "black") {
-        this.canvas = canvas;
+    constructor(width = 600, height = 600, color = "black") {
         this.color = color;
 
-        this.width = this.canvas.width / window.devicePixelRatio;
-        this.height = this.canvas.height / window.devicePixelRatio;
+        this.width = width;
+        this.height = height;
 
         this.numPoints = 20 * 60;            // = 5 seconds
         this.xs = new CBuffer(this.numPoints);
@@ -27,7 +26,7 @@ export default class RobotTrail {
     }
 
     // called in parent Robot component
-    render() {
+    render(ctx) {
         if (!this.trailing) {
             this.xs.push(-1);
             this.ys.push(-1);
@@ -48,7 +47,6 @@ export default class RobotTrail {
         const points = flatX.map((x, i) => [x, flatY[i]]);
 
         // render in parent canvas
-        const ctx = this.canvas.getContext("2d");
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 0.5;
         ctx.beginPath();

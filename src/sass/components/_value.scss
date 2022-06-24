@@ -6,6 +6,10 @@
     .label {
         width: 20px;
         font-size: 16px;
+
+        .panel--collapsed & {
+            display: none;
+        }
     }
 
     .number {
@@ -19,6 +23,16 @@
         
         display: flex;
         align-items: center;
+
+        .panel--collapsed & {
+            border: none;
+            opacity: 0.5;
+            font-size: 14px;
+            padding: 0;
+            display: inline;
+            width: auto;
+            height: auto;
+        }
     }
 
     .graph {
@@ -29,6 +43,10 @@
             width: 100%;
             height: 100%;
         }
+
+        .panel--collapsed & {
+            display: none;
+        }
     }
 }
 
@@ -37,6 +55,10 @@
     outline: none;
     border: none;
     opacity: 0.5;
+
+    .panel--collapsed & {
+        display: none;
+    }
 
     &:hover, .graph-visible & {
         opacity: 1;
