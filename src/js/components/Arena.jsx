@@ -12,29 +12,29 @@ class Arena extends React.Component {
     }
 
     componentDidMount() {
+        // retrieve ref + 2d context
         this.canvas = this.trailsRef.current;
         this.ctx = this.canvas.getContext("2d");
+        // resize context to compensate for pixel density (Retina)
         this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-        this.loop();
-
+        // callback
+        // in practice this tells the program that
+        // we are ready to initialize the robot components
+        // see App.jsx and main.jsx
         this.props.onmount(this.canvas);
+
+        // start looping
+        this.loop();
     }
 
     loop() {
+        // clear canvas
         this.ctx.clearRect(0, 0, this.props.width, this.props.height);
-        
-        // UPDATE TRAILS? HOW???
-        // retrieve them with the robots things
-        const trails = this.getTrails();
-        trails.forEach(trail => trail.render(this.ctx));
-        
-
+        // render trails
+        this.props.trails.forEach(trail => trail.render(this.ctx));
+        // loop (60fps)
         this.reqID = requestAnimationFrame(this.loop);
-    }
-
-    getTrails() {
-        return this.props.robots.map(r => r.getTrail());
     }
     
     render() {

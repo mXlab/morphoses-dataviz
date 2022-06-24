@@ -2,6 +2,10 @@
     padding: 0 16px 24px 28px;
     position: relative;
 
+    .panel--collapsed & {
+        padding-left: 20px;
+    }
+
     &:not(:last-child) {
         border-bottom: 1px solid black;
         margin-bottom: 16px;

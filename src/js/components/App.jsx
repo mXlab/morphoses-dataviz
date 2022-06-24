@@ -3,17 +3,21 @@ import React from 'react';
 import Arena from './Arena';
 import Controls from './Controls';
 import Robot from './Robot';
+import RobotTrail from './RobotTrail';
+import Panel from './Panel';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
             
         // bindings
-        this.loop = ::this.loop;
         this.arenaMounted = ::this.arenaMounted;
 
+        // states
         this.state = {
-            robots: []
+            robots: [],
+            trails: [],
+            panels: []
         };
     }
 
@@ -21,40 +25,25 @@ class App extends React.Component {
         this.trailCanvas = canvas;
 
         // now that we have the trail canvas rendered...
-        // we can create the robots!
+        // we can create the robots!!!
+        // refer to main.jsx for create() calls
         this.props.createRobots(this);
     }
 
-    loop() {
-        // for (let r in this.robots)
-        //     this.robots[r].render();
+    // getters
+    getPanels()     {      return this.state.robots.map(r => r.getPanel());        }
 
-        // loop!
-        requestAnimationFrame(this.loop);
-    }
-
-    getPanels() {
-        return this.state.robots.map(r => r.getPanel());
-    }
-
-    getWidgets() {
-        return this.state.robots.map(r => r.getWidget());
-    }
-
-    getTrails() {
-        return this.state.robots.map(r => r.getTrail());
-    }
-
+    
+    // renderer
     render() {
-        const panels = this.getPanels();
-        const widgets = this.getWidgets();
+        //const panels = this.getPanels();
             
         // jsx render
         // TODO: improve hierarchy mgmt (it's a little wonky rn)
         return(
             <>
-                <Arena robots={this.state.robots} onmount={this.arenaMounted} width="600" height="600">{widgets}</Arena>
-                <Controls>{panels}</Controls>
+                <Arena trails={this.state.trails} onmount={this.arenaMounted} width="600" height="600">{this.state.robots}</Arena>
+                <Controls>{this.state.panels}</Controls>
             </>
         );
     }
@@ -62,15 +51,19 @@ class App extends React.Component {
     create(id, name, color) {
         if (id in this.state.robots) return;
 
-        // this.robots[id] = new Robot(id, this.trailCanvas, name, color);
-        this.setState(prevState => ({
-            robots: [...prevState.robots, new Robot(id, this.trailCanvas, name, color)]
-        }));
-    }
+        const width = this.trailCanvas.width / devicePixelRatio;
+        const height = this.trailCanvas.height / devicePixelRatio;
 
-    get(id) {
-        if (!(id in this.robots)) return;
-        return this.robots[id];
+        const trail = new RobotTrail(width, height, color);
+        const panel = <Panel key={id + '--panel'} id={id} name={name} color={color} />
+        const robot = <Robot key={id} trail={trail} id={id} canvas={this.trailCanvas} name={name} color={color} />;
+
+        // add to previous ...
+        this.setState(prevState => ({
+            robots: [...prevState.robots, robot],
+            trails: [...prevState.trails, trail],
+            panels: [...prevState.panels, panel]
+        }));
     }
 }
 
