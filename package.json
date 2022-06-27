@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "admin": "concurrently \"npm run server\" \"npm run pack\"",
     "server": "tsc server/index.ts --outDir dist --esModuleInterop && node dist/index.js",
     "pack": "concurrently \"node tasks/copyViews\" \"npx webpack\" \"node-sass -w -r src/sass/main.scss -o dist/public\""
   },
@@ -29,6 +30,7 @@
     "osc-js": "^2.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-p5-wrapper": "^3.3.0",
     "simplebar-react": "^2.4.1",
     "socket.io": "^4.5.1",
     "three": "^0.141.0"
