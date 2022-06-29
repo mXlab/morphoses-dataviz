@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Arena from '../components/Arena';
 import Controls from '../components/Controls';
@@ -11,23 +11,20 @@ class AdminView extends React.Component {
         super(props);
             
         // bindings
-        this.arenaMounted = ::this.arenaMounted;
+        this.create = ::this.create;
 
         // states
         this.state = {
-            robots: [],
-            trails: [],
             panels: []
         };
     }
 
-    arenaMounted(canvas) {
-        this.trailCanvas = canvas;
+    componentDidMount() {
+        const { registry } = this.props;
 
-        // now that we have the trail canvas rendered...
-        // we can create the robots!!!
-        // refer to main.jsx for create() calls
-        this.props.onmount(this);
+        for (let i = 0; i < registry.length; i++) {
+            this.create(registry[i]);
+        }
     }
 
     // renderer
@@ -35,27 +32,18 @@ class AdminView extends React.Component {
         // jsx render
         // TODO: improve hierarchy mgmt (it's a little wonky rn)
         return(
-            <>
-                <Arena trails={this.state.trails} onmount={this.arenaMounted} width="600" height="600">{this.state.robots}</Arena>
+            <div className="viewer">
+                <Arena registry={this.props.registry} width={600} height={600} />
                 <Controls>{this.state.panels}</Controls>
-            </>
+            </div>
         );
     }
 
-    create(id, name, color) {
-        if (id in this.state.robots) return;
-
-        const width = this.trailCanvas.width / devicePixelRatio;
-        const height = this.trailCanvas.height / devicePixelRatio;
-
-        const trail = new RobotTrail(width, height, color);
+    create({id, name, color}) {
         const panel = <Panel key={id + '--panel'} id={id} name={name} color={color} />
-        const robot = <Robot key={id} trail={trail} id={id} canvas={this.trailCanvas} name={name} color={color} />;
 
         // add to previous ...
         this.setState(prevState => ({
-            robots: [...prevState.robots, robot],
-            trails: [...prevState.trails, trail],
             panels: [...prevState.panels, panel]
         }));
     }

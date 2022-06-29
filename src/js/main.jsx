@@ -6,7 +6,7 @@ import React from 'react';
 import EventManager from './managers/EventManager';
 // views
 import AdminView from './views/AdminView';
-import Visualizer from './views/Visualizer';
+import VisualizerView from './views/VisualizerView';
 
 
 window.onload = () => {
@@ -17,19 +17,26 @@ window.onload = () => {
     const el = document.querySelector("#root");
     const root = ReactDOM.createRoot(el);
 
-    // robot creation callback
-    const createRobots = app => {
-        app.create("robot1", "Robot 1", "#CA0000");
-        app.create("robot2", "Robot 2", "#008DCA");
-    };
+    const registry = [
+        {
+            id: "robot1",
+            name: "Robot 1",
+            color: "#CA0000"
+        },
+        {
+            id: "robot2",
+            name: "Robot 2",
+            color: "#008DCA"
+        }
+    ];
 
 
     // decide on which view to render
     let view;
-    if (el.classList.contains("admin")) {
-        view = <AdminView onmount={createRobots} />
-    } else if (el.classList.contains("visualizer")) {
-        view = <Visualizer onmount={createRobots} />
+    if (document.body.classList.contains("admin")) {
+        view = <AdminView registry={registry} />
+    } else if (document.body.classList.contains("visualizer")) {
+        view = <VisualizerView registry={registry} />
     }
 
 

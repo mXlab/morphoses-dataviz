@@ -1,4 +1,12 @@
-.admin {
+.viewer {
     display: flex;
     column-gap: 16px;
+}
+
+.visualizer {
+    padding: 0;
+}
+
+.p5Canvas {
+    display: block;
 }

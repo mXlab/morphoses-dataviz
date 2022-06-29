@@ -1,91 +1,90 @@
-import { Vector3, Quaternion } from "three";
-import React from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import RobotWidget from './RobotWidget';
 
-import QuatWidget from "./QuatWidget";
 import EventManager from '../managers/EventManager';
-import RobotWidget from "./RobotWidget";
+import RobotTrail from './RobotTrail';
 
-class Robot extends React.Component {
-    constructor(props) {
-        super(props);
+const Robot = (props, ref) => {
+    // props
+    const {
+        // defaults
+        color = "black",
+        size = 20,
 
-        // bindings
-        this.setPosition = ::this.setPosition;
-        this.setDirection = ::this.setDirection;
-        this.setOrientation = ::this.setOrientation;
-        this.onClick = ::this.onClick;
-        this.toggleControls = ::this.toggleControls;
+        // bools
+        allowP5 = false,
+
+        // the rest
+        id, name,
+    } = props;
 
 
-        // states
-        this.state = {
-            pos: { x: 0.5, y: 0.5 },
-            orientation: { x: 0, y: 0, z: 1, w: 0 },
-            rotation: { x: 0, y: 0, z: 0 },
-            motorOrientation: { x: 0, y: 0, z: 1, w: 0 },
-            motorRotation: { x: 0, y: 0, z: 0 },
 
-            showControls: true,
-            trailing: true,
-            allowRender: true,
-        };
 
-        
-        // side components
-        //this.quatWidget = new QuatWidget();
+    // states
+    const [pos, setPos]                 = useState({ x: 0.5, y: 0.5 });
+    const [mrz, setMrz]                 = useState(0);
+    const [trail]                       = useState(new RobotTrail(color));
+    const [trailing, setTrailing]       = useState(true);
 
-        // plug events
-        EventManager
-            .plug(`${this.props.id} pos`, this.setPosition)
-            //.plug(`${this.id} quat`, this.setOrientation)
-            .plug(`${this.props.id} mrot`, this.setDirection);
-    }
 
-    // set position of robot
-    // (where they are)
-    setPosition(pos) {
-        this.setState({ pos })
+    // hooks called from parent
+    useImperativeHandle(ref, () => ({
+        draw(p5, arenaSize) {
+            const { map } = p5;
 
-        if (this.state.trailing) {
-            this.props.trail.push(pos);
+            // remap position on WebGL arena...
+            const x = map(pos.x, 0, 1, -(arenaSize/2) + (size/2), (arenaSize/2) - (size/2));
+            const y = map(pos.y, 1, 0, -(arenaSize/2) + (size/2), (arenaSize/2) - (size/2));
+
+            // circle
+            p5.push();
+            p5.translate(x, y);
+
+            p5.fill(color);
+            p5.noStroke();
+            p5.circle(0, 0, size);
+
+            p5.pop();
+
+            // draw trails
+            trail.draw(p5, arenaSize, arenaSize);
+        },
+
+        renderCanvasTrail(ctx, width, height) {
+            trail.render(ctx, width, height);
         }
-    }
+    }));
 
-    // set direction of robot
-    // (where they are looking)
-    setDirection({ z:mrz }) {
-        this.setState(state => state.motorRotation.z = mrz);
-    }
 
-    // set quaternion
-    setOrientation({ x:qx, y:qy, z:qz, w:qw }) {
-        //const quaternion = new Quaternion();
-        //quaternion.setFromAxisAngle(new Vector3(qx,qy,qz).normalize(), qw * Math.PI * 2);
+    // mount hook
+    useEffect(() => {
+        // event handlers
+        EventManager.plug(`${id} pos`, (pos) => {
+            setPos(pos);
 
-        //this.quatWidget.setOrientation(quaternion);
-    }
+            if (trailing && trail) {
+                trail.push(pos);
+            }
+        });
 
-    toggleControls() {
-        this.setState({ showControls: !this.state.showControls });
-    }
+        EventManager.plug(`${id} mrot`, ({z:mrz}) => setMrz(mrz));
+    }, [id]);// <---- only do this once!
 
-    onClick(e) {
-    }
 
-    render() {
+    // render
+    if (!allowP5) {
         return <RobotWidget
-            key={this.props.id + '--widget'}
-            pos={this.state.pos}
-            color={this.props.color}
-            mrz={this.state.motorRotation.z}
-            size={this.props.size}
+            key={id + '--widget'}
+            pos={pos}
+            color={color}
+            mrz={mrz}
+            size={size}
         />;
     }
+    
+    return <></>;
+    
 }
 
-Robot.defaultProps = {
-    color: "black",
-    size: 20
-};
-
-export default Robot;
+export default forwardRef(Robot);

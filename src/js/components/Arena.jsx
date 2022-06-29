@@ -1,61 +1,78 @@
-import React from 'react';
+import React, { forwardRef, useEffect, useRef, useState, createRef } from 'react';
+
+import Robot from './Robot';
+
+const Arena = (props, ref) => {
+    const { width = 600, height = 600, registry } = props;
+    const trailsRef = useRef();
+
+    const [robots, setRobots] = useState([]);
+    const [robotRefs, setRobotRefs] = useState([]);
+
+    const [canvas, setCanvas] = useState();
+    const [ctx, setCtx] = useState();
 
 
-class Arena extends React.Component {
-    constructor(props) {
-        super(props);
+    // mount hook
+    useEffect(() => {
+        // create canvas
+        setCanvas(trailsRef.current);
+        setCtx(trailsRef.current.getContext("2d"));
 
-        this.loop = ::this.loop;
+        
+        // create robots
+        for (let i = 0; i < registry.length; i++) {
+            const {id, name, color} = registry[i];
+            
+            const robotRef = createRef();
+            const robot = <Robot ref={robotRef} key={id} id={id} canvas={canvas} name={name} color={color} />;
+        
+            setRobots(oldRobots => [...oldRobots, robot]);
+            setRobotRefs(oldRefs => [...oldRefs, robotRef]);
+        }
+    }, [registry]);
 
-        // ref creation
-        this.trailsRef = React.createRef();
+
+    // canvas resizer (for pixel density)
+    useEffect(() => {
+        if (!ctx) return;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }, [ctx]);
+    // loop trigger watch
+    useEffect(() => {
+        if (robots.length > 0) {
+            // start canvas loop
+            loop();
+        }
+    }, [robots]);
+
+
+    function loop() {
+        ctx.clearRect(0,0,width,height);
+        robotRefs.forEach(({current:robot}) => robot.renderCanvasTrail(ctx, width, height));
+        
+        requestAnimationFrame(loop);
     }
 
-    componentDidMount() {
-        // retrieve ref + 2d context
-        this.canvas = this.trailsRef.current;
-        this.ctx = this.canvas.getContext("2d");
-        // resize context to compensate for pixel density (Retina)
-        this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-        // callback
-        // in practice this tells the program that
-        // we are ready to initialize the robot components
-        // see App.jsx and main.jsx
-        this.props.onmount(this.canvas);
+    // render
+    const canvasStyle = {
+        width: width + 'px',
+        height: height + 'px',
+    };
 
-        // start looping
-        this.loop();
-    }
+    return (
+        <div className="arena">
+            {robots}
+            <canvas
+                className="trails"
+                width={width * window.devicePixelRatio}
+                height={height * window.devicePixelRatio}
+                style={canvasStyle}
+                ref={trailsRef}
+            ></canvas>
+        </div>
+    )
+};
 
-    loop() {
-        // clear canvas
-        this.ctx.clearRect(0, 0, this.props.width, this.props.height);
-        // render trails
-        this.props.trails.forEach(trail => trail.render(this.ctx));
-        // loop (60fps)
-        this.reqID = requestAnimationFrame(this.loop);
-    }
-    
-    render() {
-        let canvasStyle = {
-            width: this.props.width + 'px',
-            height: this.props.height + 'px',
-        };
-
-        return (
-            <div className="arena">
-                {this.props.children}
-                <canvas
-                    className="trails"
-                    width={this.props.width * window.devicePixelRatio}
-                    height={this.props.height * window.devicePixelRatio}
-                    style={canvasStyle}
-                    ref={this.trailsRef}
-                ></canvas>
-            </div>
-        )
-    }
-}
-
-export default Arena;
+export default forwardRef(Arena);
