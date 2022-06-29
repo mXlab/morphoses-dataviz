@@ -34,16 +34,16 @@ const Robot = (props, ref) => {
             const { map } = p5;
 
             // remap position on WebGL arena...
-            const x = map(pos.x, 0, 1, -(arenaSize/2) + (size/2), (arenaSize/2) - (size/2));
-            const y = map(pos.y, 1, 0, -(arenaSize/2) + (size/2), (arenaSize/2) - (size/2));
+            const x = map(pos.x, 0, 1, (-arenaSize/2) + (size/2), (arenaSize/2) - (size/2));
+            const y = map(pos.y, 1, 0, (-arenaSize/2) + (size/2), (arenaSize/2) - (size/2));
 
             // circle
             p5.push();
-            p5.translate(x, y);
+            p5.translate(window.innerWidth / 2, window.innerHeight / 2);
 
             p5.fill(color);
             p5.noStroke();
-            p5.circle(0, 0, size);
+            p5.circle(x, y, size);
 
             p5.pop();
 

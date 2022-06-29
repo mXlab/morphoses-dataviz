@@ -1,6 +1,8 @@
 import React from "react";
 import GraphBuffer from "./GraphBuffer";
 
+// TODO: dynamic range? draw 
+
 class Graph extends React.Component {
     constructor(props) {
         super(props);
@@ -25,7 +27,7 @@ class Graph extends React.Component {
     }
 
     componentWillUnmount() {
-        window.cancelAnimationFrame(this.reqID);
+        cancelAnimationFrame(this.reqID);
         this.reqID = null;
     }
 
@@ -51,8 +53,10 @@ class Graph extends React.Component {
     }
 
     update() {
-        // update buffer state
-        this.buffer.update();
+        if (!this.props.disabled) {
+            // update buffer state
+            this.buffer.update();
+        }
         // get points from buffer...
         const points = this.buffer.points();
 

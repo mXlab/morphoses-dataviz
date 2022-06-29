@@ -1,6 +1,8 @@
 // very similar to Graph except it fades over time
 import CBuffer from "CBuffer";
 
+import { BALL_SIZE } from '../utils/settings';
+
 
 export default class RobotTrail {
     constructor(color = "black") {
@@ -22,16 +24,16 @@ export default class RobotTrail {
         this.ys.push(y);
     }
 
-    generatePoints(width, height) {
+    generatePoints(width, height, density = 1) {
         let flatX = this.xs.toArray();
         // set to range
-        flatX = flatX.map(x => x * (width - 10) + 5);
+        flatX = flatX.map(x => x * (width - BALL_SIZE) + (BALL_SIZE/2)).filter((x, i) => (i % density === 0) || (i === flatX.length-1));
         // TODO: account for multiple lines separated by -1 values
         // remove -1 duplicates
         // flatX = flatX.filter((x,i) => x === -1 && x !== flatX[Math.max(i - 1, 0)]);
 
         let flatY = this.ys.toArray();
-        flatY = flatY.map(y => (1 - y) * (height - 10) + 5);
+        flatY = flatY.map(y => (1 - y) * (height - BALL_SIZE) + BALL_SIZE/2).filter((y, i) => (i % density === 0) || (i === flatY.length-1));
         // flatY = flatY.filter((y,i) => y === -1 && y !== flatY[Math.max(i - 1, 0)]);
 
         // interleave
@@ -41,7 +43,7 @@ export default class RobotTrail {
     // called in Arena.jsx
     render(ctx, width = 600, height = 600) {
         // get list of points
-        const points = this.generatePoints(width, height);
+        const points = this.generatePoints(width, height, 1);
 
         // render in parent canvas
         ctx.strokeStyle = this.color;
@@ -56,6 +58,20 @@ export default class RobotTrail {
 
     // called in VisualizerView.jsx
     draw(p5, width, height) {
-        const points = this.generatePoints(width, height);
+        const points = this.generatePoints(width, height, 1);
+
+        p5.stroke(this.color);
+        p5.strokeWeight(5);
+
+        p5.push();
+        p5.translate((window.innerWidth/2) - (width/2), (window.innerHeight/2) - (height/2));
+
+        p5.beginShape();
+        points.forEach(([x, y]) => {
+            p5.vertex( x, y );
+        });
+        p5.endShape();
+
+        p5.pop();
     }
 }

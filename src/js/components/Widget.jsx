@@ -14,9 +14,6 @@ class Widget extends React.Component {
         }
     }
 
-    componentDidMount() {
-    }
-
     toggleWidget() {
         this.setState({ disabled: !this.state.disabled });
     }
@@ -34,6 +31,7 @@ class Widget extends React.Component {
                 tag={`${this.props.tag} ${this.props.param}`}
                 subparam={"xyzw".charAt(i)}
                 label={"XYZW".charAt(i)}
+                disabled={this.state.disabled}
             ></Value>);
         }
 

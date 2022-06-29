@@ -3,14 +3,17 @@ import React, { forwardRef, useEffect, useRef, useState, createRef } from 'react
 import Robot from './Robot';
 
 const Arena = (props, ref) => {
+    // props
     const { width = 600, height = 600, registry } = props;
-    const trailsRef = useRef();
 
+    // states
     const [robots, setRobots] = useState([]);
     const [robotRefs, setRobotRefs] = useState([]);
-
     const [canvas, setCanvas] = useState();
     const [ctx, setCtx] = useState();
+    
+    // refs
+    const trailsRef = useRef();
 
 
     // mount hook
@@ -38,6 +41,7 @@ const Arena = (props, ref) => {
         if (!ctx) return;
         ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     }, [ctx]);
+    
     // loop trigger watch
     useEffect(() => {
         if (robots.length > 0) {

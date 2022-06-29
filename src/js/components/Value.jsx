@@ -40,7 +40,7 @@ class Value extends React.Component {
 
         let graph;
         if (this.state.showGraph) {
-            graph = <Graph ref={this.graphRef} initialValue={this.state.value} />;
+            graph = <Graph disabled={this.props.disabled} ref={this.graphRef} initialValue={this.state.value} />;
         } else {
             graph = null;
         }
@@ -61,6 +61,8 @@ class Value extends React.Component {
     }
 
     onUpdate(args) {
+        if (this.props.disabled) return;
+
         const value = parseFloat(args[this.props.subparam].toFixed(this.props.precision));
 
         // set states
