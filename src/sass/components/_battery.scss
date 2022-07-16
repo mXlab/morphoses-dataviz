@@ -1,0 +1,18 @@
+.battery {
+    font-family: "Inconsolata", monospace;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+
+    &_svg {
+        &__bar {
+            display: none;
+        }
+
+        &__gauge {
+            transform: scaleX(var(--level));
+        }
+    }
+}

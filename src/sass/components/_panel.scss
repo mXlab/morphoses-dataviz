@@ -11,19 +11,27 @@
         position: absolute;
         top: 0;
         left: 0;
+        right: 0;
         transform: translateY(-100%);
+        width: 100%;
+        
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-        background-color: var(--robot-color);
-        color: white;
-        font-family: "Inconsolata", sans-serif;
-        text-transform: uppercase;
-        font-weight: 600;
-        padding: 10px 20px;
-        font-size: 24px;
-        letter-spacing: .03em;
-
-        .panel--collapsed & {
-            padding: 10px 14px;
+        button {
+            background-color: var(--robot-color);
+            color: white;
+            font-family: "Inconsolata", sans-serif;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 10px 20px;
+            font-size: 24px;
+            letter-spacing: .03em;
+            
+            .panel--collapsed & {
+                padding: 10px 14px;
+            }
         }
     }
 

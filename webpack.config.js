@@ -24,7 +24,12 @@ module.exports = {
                         plugins: ["@babel/plugin-transform-object-assign", "@babel/plugin-proposal-function-bind"], // ensure compatibility with IE 11
                     },
                 },
-              },
+            },
+            {
+                test: /\.svg$/i,
+                issuer: /\.[jt]sx?$/,
+                use: ['@svgr/webpack'],
+            },
         ]
     },
 

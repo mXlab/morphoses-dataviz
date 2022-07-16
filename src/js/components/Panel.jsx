@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SimpleBar from 'simplebar-react';
+import Battery from './Battery';
 
 const Panel = (props) => {
     // props
@@ -26,7 +27,11 @@ const Panel = (props) => {
     // render
     return (
         <div className={className} style={panelStyle}>
-            <button onClick={() => setCollapsed(!collapsed)} className="panel__header">{formattedName}</button>
+            <div className="panel__header">
+                <button onClick={() => setCollapsed(!collapsed)}>{formattedName}</button>
+                <Battery id={id} active={true} color={color}></Battery>
+            </div>
+            
             <SimpleBar style={{ maxHeight: 600 }}>
                 {children}
             </SimpleBar>

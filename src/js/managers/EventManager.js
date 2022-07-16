@@ -6,6 +6,7 @@ export default class EventManager {
 
         // initialize socket
         this.socket = io();
+        this.listeners = [];
     }
 
     static init() {
@@ -19,10 +20,17 @@ export default class EventManager {
     // PLUG / UNPLUG LISTENER
     static plug(evt, listener) {
         EventManager.instance.socket.on(evt, listener);
+        EventManager.instance.listeners.push({ evt, listener });
         return EventManager;
     }
     static unplug(evt, listener) {
         EventManager.instance.socket.off(evt, listener);
+        EventManager.instance.listeners.filter(x => x.evt !== evt && x.listener !== listener);
+
         return EventManager;
+    }
+
+    static hasPlug(evt, listener) {
+        return EventManager.instance.listeners.some(x => x.evt === evt && x.listener === listener);
     }
 }
