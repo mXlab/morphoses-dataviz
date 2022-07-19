@@ -32,6 +32,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-p5-wrapper": "^3.3.0",
+    "react-timer-hook": "^3.0.5",
     "simplebar-react": "^2.4.1",
     "socket.io": "^4.5.1",
     "three": "^0.141.0"

@@ -1,3 +1,14 @@
+@keyframes flicker {
+
+}
+
+@mixin flicker-anim() {
+    animation-name: flicker;
+    animation-duration: 5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
 .panel {
     width: 400px;
     position: relative;
@@ -28,6 +39,9 @@
             padding: 10px 20px;
             font-size: 24px;
             letter-spacing: .03em;
+
+            transition: 0.5s ease;
+            transition-property: background-color, color, opacity;
             
             .panel--collapsed & {
                 padding: 10px 14px;
@@ -45,12 +59,40 @@
         bottom: 0;
         width: 100%;
         height: 100%;
-        z-index: 1;
+        z-index: -1;
         border: 1px solid black;
         pointer-events: none;
+
+        transition: 0.5s ease;
+        transition-property: background-color, border-color, opacity;
+    }
+
+    .simplebar-wrapper {
+        transition: 0.5s ease opacity;
     }
 
     &--collapsed {
         width: 220px;
+    }
+
+    &--inactive {
+        .panel__header button {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--robot-color);
+            opacity: 0.25;
+        }
+
+        &::after {
+            border-color: transparent;
+            background:rgba(0, 0, 0, 0.1);
+            opacity: 0.25;
+        }
+        
+        pointer-events: none;
+        user-select: none;
+
+        .simplebar-wrapper {
+            opacity: 0.25;
+        }
     }
 }

@@ -24,12 +24,12 @@ const Battery = (props) => {
     // render
     const className = classNames(
         "battery",
-        { "battery--active": active }
+        { "battery--inactive": !active }
     );
 
     return (
         <span className={className}>
-            {batteryLevel}%
+            {active ? `${batteryLevel}%` : `N/A`}
             <BatterySVG style={{ color, "--level": batteryLevel/100 }}></BatterySVG>
         </span>
     );

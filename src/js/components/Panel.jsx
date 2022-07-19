@@ -1,24 +1,47 @@
+import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
+import { useTimer } from 'react-timer-hook';
 import SimpleBar from 'simplebar-react';
 import Battery from './Battery';
+import EventManager from '../managers/EventManager';
 
-const Panel = (props) => {
-    // props
-    const { id, name, color, children } = props;
-
+const Panel = ({ id, name, color, children }) => {
     // states
     const [collapsed, setCollapsed] = useState(false);
+    const [active, setActive] = useState(false);
+
+
+    // create timer
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + 5);
+    const { restart } = useTimer({ expiryTimestamp: time, onExpire: () => {
+        setActive(false);
+    } });
+
+
+    // on mount
+    useEffect(() => {
+        EventManager.plug(`${id} active`, () => {
+            setActive(true);
+        
+            // restart timer
+            const time = new Date();
+            time.setSeconds(time.getSeconds() + 5);
+            restart(time, true);
+        });
+    }, [id]);
 
 
     // styles
     const panelStyle = {
         "--robot-color": color
     };
-
     // class names
-    let className = 'panel';
-    if (collapsed) className += ' panel--collapsed';
-
+    const className = classNames([
+        "panel",
+        { "panel--collapsed": collapsed },
+        { "panel--inactive": !active }
+    ]);
     // rendered name
     const formattedName = collapsed ?
         name.charAt(0) + name.charAt(name.length - 1) :
@@ -29,14 +52,14 @@ const Panel = (props) => {
         <div className={className} style={panelStyle}>
             <div className="panel__header">
                 <button onClick={() => setCollapsed(!collapsed)}>{formattedName}</button>
-                <Battery id={id} active={true} color={color}></Battery>
+                <Battery id={id} active={active} color={color}></Battery>
             </div>
             
             <SimpleBar style={{ maxHeight: 600 }}>
                 {children}
             </SimpleBar>
         </div>
-    )
+    );
 }
 
 export default Panel;
