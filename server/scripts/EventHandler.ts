@@ -14,12 +14,14 @@ export default (msg: OscMessage) => {
 
     // TODO: actions
     if (path.some(x => x === "action")) {
+        SocketManager.emit(path.join(" "), msg.args[0]);
         return;
     }
 
 
     // TODO: rewards
     if (path.some(x => x === "reward")) {
+        SocketManager.emit(path.join(" "), msg.args[0]);
         return;
     }
     

@@ -18,6 +18,14 @@
         padding-top: 16px;
     }
 
+    .simplebar-wrapper {
+        transition: 0.5s ease opacity;
+    }
+
+    &.collapsed {
+        width: 220px;
+    }
+
     &__header {
         position: absolute;
         top: 0;
@@ -43,7 +51,7 @@
             transition: 0.5s ease;
             transition-property: background-color, color, opacity;
             
-            .panel--collapsed & {
+            .collapsed & {
                 padding: 10px 14px;
             }
         }
@@ -65,14 +73,6 @@
 
         transition: 0.5s ease;
         transition-property: background-color, border-color, opacity;
-    }
-
-    .simplebar-wrapper {
-        transition: 0.5s ease opacity;
-    }
-
-    &--collapsed {
-        width: 220px;
     }
 
     &--inactive {

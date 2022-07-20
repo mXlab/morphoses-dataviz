@@ -1,54 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
 import Value from './Value';
 
-class Widget extends React.Component {
-    constructor(props) {
-        super(props);
+const Widget = ({ name, tag, param, size }) => {
+    // states
+    const [disabled, setDisabled] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
 
-        // bindings
-        this.toggleWidget = ::this.toggleWidget;
 
-        // states
-        this.state = {
-            disabled: false,
-        }
-    }
+    // state-driven classes
+    const widgetClass = classNames([
+        "widget",
+        { disabled },
+        { collapsed }
+    ]);
 
-    toggleWidget() {
-        this.setState({ disabled: !this.state.disabled });
-    }
+    // Value objects, fed from props
+    const values = Array.apply(null, Array(size)).map((x, i) => (
+        <Value
+            key={`${tag} ${param}${i}`}
+            tag={`${tag} ${param}`}
+            subparam={"xyzw".charAt(i)}
+            label={"XYZW".charAt(i)}
+            disabled={disabled}
+        ></Value>
+    ));
 
-    render() {
-        let widgetClass = 'widget';
-        if (this.state.disabled)
-            widgetClass += ' disabled';
-        
-        // define Value object array
-        let values = [];
-        for (let i = 0; i < this.props.size; i++) {
-            values.push(<Value
-                key={`${this.props.tag} ${this.props.param}${i}`}
-                tag={`${this.props.tag} ${this.props.param}`}
-                subparam={"xyzw".charAt(i)}
-                label={"XYZW".charAt(i)}
-                disabled={this.state.disabled}
-            ></Value>);
-        }
-
-        return (
-            <div className={widgetClass}>
-                <div className="widget__header">
-                    <button className="widget__toggle" onClick={this.toggleWidget}></button>
-                    <h2 className="widget__title">{this.props.name}</h2>
-                    <span className="widget__addr">{`/${this.props.tag}/${this.props.param}`}</span>
-                </div>
-
-                <div className="widget__values">
-                    {values}
-                </div>
+    // render
+    return (
+        <div className={widgetClass}>
+            <div className="widget__header">
+                <button className="widget__toggle" onClick={() => setDisabled(!disabled)}></button>
+                <h2 className="widget__title"><button onClick={() => setCollapsed(!collapsed)}>{name}</button></h2>
+                <span className="widget__addr">{`/${tag}/${param}`}</span>
             </div>
-        )
-    } 
-}
+
+            <div className="widget__values">{values}</div>
+        </div>
+    )
+};
 
 export default Widget;

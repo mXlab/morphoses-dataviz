@@ -1,80 +1,66 @@
 import EventManager from "../managers/EventManager";
 import Graph from "./Graph"
-import React from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import classNames from "classnames";
 
-class Value extends React.Component {
-    constructor(props) {
-        super(props);
+const Value = ({ tag, subparam, label, disabled, precision = 3 }) => {
+    const [value, setValue] = useState(0);
+    const [showGraph, setShowGraph] = useState(false);
 
-        this.state = {
-            value: 0,
-            active: true,
-            showGraph: false
-        };
+    // ref for da graph :3
+    const graphRef = useRef();
 
-        this.graphRef = React.createRef();
+    // update callback :33
+    const onUpdate = useCallback((args) => {
+        if (disabled) return;
 
-        // bindings
-        this.toggleGraph = ::this.toggleGraph;
-        this.onUpdate = ::this.onUpdate;
-    }
-
-    toggleGraph() {
-        this.setState({ showGraph: !this.state.showGraph });
-    }
-
-    componentDidMount() {
-        // attach listener
-        EventManager.plug(this.props.tag, this.onUpdate);
-    }
-
-    componentWillUnmount() {
-        EventManager.unplug(this.props.tag, this.onUpdate);
-    }
-
-    render() {
-        // set value class
-        let valueClass = "value";
-        if (this.state.showGraph)
-            valueClass += " graph-visible";
-
-        let graph;
-        if (this.state.showGraph) {
-            graph = <Graph disabled={this.props.disabled} ref={this.graphRef} initialValue={this.state.value} />;
-        } else {
-            graph = null;
-        }
-            
-        // rendar!!!!!!! :D
-        return (
-            <div className={valueClass} data-key={this.props.tag}>
-                <span className="label">{this.props.label}</span>
-                <span className="number">{this.state.value}</span>
-
-                <button className="show-graph" onClick={this.toggleGraph}>
-                    <img src="/images/graph_icon.svg" alt="Toggle graph" />
-                </button>
-
-                {graph}
-            </div>
-        );
-    }
-
-    onUpdate(args) {
-        if (this.props.disabled) return;
-
-        const value = parseFloat(args[this.props.subparam].toFixed(this.props.precision));
+        // parse value to float (since it's apparently a string when received here)
+        // also make up for the presence of a subparam or not
+        const value = subparam
+                    ? parseFloat(args[subparam].toFixed(precision))
+                    : parseFloat(args.toFixed(precision));
 
         // set states
-        this.setState({ value });
-        if (this.graphRef.current) {
-            this.graphRef.current.addValue(value);
+        setValue(value);
+        if (graphRef.current) {
+            graphRef.current.addValue(value);
         }
-    }
+    }, []);
+
+
+    // mount
+    useEffect(() => {
+        if (!disabled) {
+            EventManager.plug(tag, onUpdate);
+        } else {
+            EventManager.unplug(tag, onUpdate);
+        }
+    }, [disabled]);
+
+
+    // render
+    const valueClass = classNames([
+        "value",
+        { "graph-visible": showGraph }
+    ]);
+
+    const graph = showGraph
+                  ? <Graph disabled={disabled} ref={graphRef} initialValue={value} />
+                  : null;
+
+    return (
+        <div className={valueClass} data-key={tag} data-disabled={disabled}>
+            <span className="label">{label}</span>
+            <span className="number">{value}</span>
+
+            <button className="show-graph" onClick={() => setShowGraph(!showGraph)}>
+                <img src="/images/graph_icon.svg" alt="Toggle graph" />
+            </button>
+
+            {graph}
+        </div>
+    );
 }
 
-Value.defaultProps = {
-    precision: 3
-}
 
 export default Value;

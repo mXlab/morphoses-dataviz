@@ -1,6 +1,7 @@
 import React from 'react';
 import Panel from './Panel';
 import Widget from './Widget';
+import ActionWidget from './ActionWidget';
 
 const Controls = (props) => {
     const { registry } = props;
@@ -10,11 +11,12 @@ const Controls = (props) => {
             {registry.map(({id, name, color}) => {
                 return (
                     <Panel key={`${id}--panel`} id={id} name={name} color={color}>
-                        <Widget name="Position" tag={id} param="pos" size="2"></Widget>
-                        <Widget name="Quaternion" tag={id} param="quat" size="4"></Widget>
-                        <Widget name="Rotation" tag={id} param="rot" size="3"></Widget>
-                        <Widget name="Motor Quaternion" tag={id} param="mquat" size="4"></Widget>
-                        <Widget name="Motor Rotation" tag={id} param="mrot" size="3"></Widget>
+                        <ActionWidget id={id} color={color}></ActionWidget>
+
+                        <Widget name="Position" tag={id} param="pos" size={2}></Widget>
+                        <Widget name="Quaternion" tag={id} param="quat" size={4}></Widget>
+                        <Widget name="Rotation" tag={id} param="rot" size={3}></Widget>
+                        {/* TODO: mrz widget here */}
                     </Panel>
                 )
             })}

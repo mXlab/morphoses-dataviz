@@ -39,7 +39,7 @@ const Panel = ({ id, name, color, children }) => {
     // class names
     const className = classNames([
         "panel",
-        { "panel--collapsed": collapsed },
+        { collapsed },
         { "panel--inactive": !active }
     ]);
     // rendered name

@@ -21,11 +21,12 @@ export default class EventManager {
     static plug(evt, listener) {
         EventManager.instance.socket.on(evt, listener);
         EventManager.instance.listeners.push({ evt, listener });
+
         return EventManager;
     }
     static unplug(evt, listener) {
         EventManager.instance.socket.off(evt, listener);
-        EventManager.instance.listeners.filter(x => x.evt !== evt && x.listener !== listener);
+        EventManager.instance.listeners = EventManager.instance.listeners.filter(x => x.evt !== evt && x.listener !== listener);
 
         return EventManager;
     }

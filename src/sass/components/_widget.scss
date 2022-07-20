@@ -2,7 +2,7 @@
     padding: 0 16px 24px 28px;
     position: relative;
 
-    .panel--collapsed & {
+    &.collapsed, .collapsed & {
         padding-left: 20px;
     }
 
@@ -28,7 +28,7 @@
             opacity: 0.25;
         }
 
-        .panel--collapsed & {
+        .collapsed & {
             height: 45px;
         }
     }
@@ -41,14 +41,25 @@
 
         .disabled & {
             opacity: 0.5;
-            text-decoration: line-through;
         }
     }
 
     &__title {
         font-size: 24px;
 
-        .panel--collapsed & {
+        > button {
+            background: transparent;
+
+            &:hover {
+                opacity: 0.5;
+            }
+
+            .disabled & {
+                text-decoration: line-through;
+            }
+        }
+
+        .collapsed & {
             font-size: 18px;
         }
     }
@@ -57,7 +68,7 @@
         font-family: "Inconsolata", monospace;
         opacity: 0.5;
 
-        .panel--collapsed & {
+        .collapsed & {
             display: none;
         }
     }
@@ -72,9 +83,58 @@
             pointer-events: none;
         }
 
-        .panel--collapsed & {
+        .collapsed & {
             flex-direction: row;
             column-gap: 8px;
         }
+    }
+
+    
+    // action widget
+    &__actions {
+        font-family: 'Inconsolata', monospace;
+        font-weight: bold;
+
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+
+        &--curr {
+            display: inline-block;
+            width: 50px;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            flex-shrink: 0;
+
+            font-size: 24px;
+            color: white;
+            background-color: var(--robot-color);
+
+            .disabled & {
+                background-color: lightgrey;
+                opacity: 0.25;
+            }
+        }
+
+        &--past {
+            display: flex;
+            align-items: center;
+            column-gap: 24px;
+            flex-wrap: nowrap;
+            
+            li {
+                font-size: 14px;
+            }
+
+            .disabled & {
+                opacity: 0.25;
+            }
+        }
+    }
+
+    .line {
+        border-bottom: 1px solid black;
+        margin: 16px 0;
     }
 }
