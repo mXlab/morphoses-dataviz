@@ -11,11 +11,12 @@ import VisualizerView from './views/VisualizerView';
 import registry from './registry';
 
 
-window.onload = () => {
-    // initialize managers
-    EventManager.init();
+window.onload = async () => {
+    // we get anchor data on startup
+    const anchorData = await EventManager.init();
+    // console.log(anchorData);
 
-    // root!
+    // initialize React!!!
     const el = document.querySelector("#root");
     const root = ReactDOM.createRoot(el);
 
@@ -23,7 +24,7 @@ window.onload = () => {
     // decide on which view to render
     let view;
     if (document.body.classList.contains("admin")) {
-        view = <AdminView registry={registry} />
+        view = <AdminView registry={registry} anchorData={JSON.parse(anchorData)} />
     } else if (document.body.classList.contains("visualizer")) {
         view = <VisualizerView registry={registry.robots} />
     }

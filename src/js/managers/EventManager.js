@@ -3,18 +3,25 @@ import io from 'socket.io-client';
 export default class EventManager {
     constructor() {
         this.flagDebug = false;
+        this.anchors = null;
+    }
 
-        // initialize socket
-        this.socket = io();
-        this.socket.on("connect", () => {
-            this.socket.on(this.socket.id + "__anchors", data => {
+    connect() {
+        return new Promise((resolve, reject) => {
+            // initialize socket
+            this.socket = io();
+            this.socket.on("connect", () => {
+                this.socket.on(this.socket.id + "__anchors", data => {
+                    resolve(data);
+                });
             });
+            this.listeners = [];
         });
-        this.listeners = [];
     }
 
     static init() {
         EventManager.instance = new EventManager();
+        return EventManager.instance.connect();
     }
 
     static emit(evt, args) {
