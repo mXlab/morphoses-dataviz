@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useTimer } from 'react-timer-hook';
 import SimpleBar from 'simplebar-react';
 import Battery from './Battery';
+import IMU from './IMU';
 import EventManager from '../managers/EventManager';
 
 const Panel = ({ id, name, color, children }) => {
@@ -52,6 +53,12 @@ const Panel = ({ id, name, color, children }) => {
         <div className={className} style={panelStyle}>
             <div className="panel__header">
                 <button onClick={() => setCollapsed(!collapsed)}>{formattedName}</button>
+                
+                <div className="imu__container">
+                    <IMU id={id} type="main"></IMU>
+                    <IMU id={id} type="side"></IMU>
+                </div>
+
                 <Battery id={id} active={active} color={color}></Battery>
             </div>
             

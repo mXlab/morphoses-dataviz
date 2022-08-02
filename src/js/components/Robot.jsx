@@ -1,6 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import RobotWidget from './RobotWidget';
-
 import EventManager from '../managers/EventManager';
 import RobotTrail from './RobotTrail';
 
@@ -18,9 +17,7 @@ const Robot = (props, ref) => {
         id, name,
     } = props;
 
-
-
-
+    
     // states
     const [pos, setPos]                 = useState({ x: 0.5, y: 0.5 });
     const [mrz, setMrz]                 = useState(0);

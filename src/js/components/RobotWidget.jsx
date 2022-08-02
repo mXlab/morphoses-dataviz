@@ -1,31 +1,23 @@
 import React from 'react';
+import WidgetSVG from '../../assets/robot_widget.svg';
 
-class RobotWidget extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+const RobotWidget = ({color, pos, mrz}) => {
+    const containerStyle = {
+        color: color,
+        transform: `translate3d(${pos.x * 100}%, ${(1 - pos.y) * 100}%, 1px)`
+    };
+    const widgetStyle = {
+        color: color,
+        transform: `translate(-50%, -50%) rotate(${(((1 - mrz) * 360) + 90) % 360}deg)`
+    };
 
-    render() {
-        const containerStyle = {
-            color: this.props.color,
-            transform: `translate3d(${this.props.pos.x * 100}%, ${(1 - this.props.pos.y) * 100}%, 1px)`
-        };
-        const widgetStyle = {
-            width: this.props.size,
-            height: this.props.size,
-            color: this.props.color,
-            transform: `translate(-50%, -50%) rotate(${(((1 - this.props.mrz) * 360) + 90) % 360}deg)`
-        };
-
-        return (
-            <>
-                <div className="robot__container" style={containerStyle}>
-                    <button style={widgetStyle} onClick={this.props.onClick} className="robot"></button>
-                </div>
-                <div className="control"></div>
-            </>
-        )
-    }
-}
+    return (
+        <>
+            <div className="robot__container" style={containerStyle}>
+                <button style={widgetStyle}><WidgetSVG></WidgetSVG></button>
+            </div>
+        </>
+    )
+};
 
 export default RobotWidget;

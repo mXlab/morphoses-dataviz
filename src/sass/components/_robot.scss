@@ -14,16 +14,7 @@
         width: 10px;
         height: 10px;
         transform: translate(-50%, -50%);
-
         background-color: currentColor;
-
-        &:hover {
-            opacity: 0.75;
-        }
-        &:active {
-            color: black !important;
-            opacity: 1 !important;
-        }
 
         // orientation guide
         &::after {
@@ -47,6 +38,17 @@
             left: 0;
             right: 0;
             bottom: 0;
+
+            button {
+                background: transparent;
+                svg * {
+                    fill: currentColor;
+                }
+
+                &:hover, &:focus {
+                    color: var(--color);
+                }
+            }
         }
 
         &__trail {

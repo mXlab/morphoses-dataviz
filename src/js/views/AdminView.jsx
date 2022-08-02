@@ -9,7 +9,7 @@ const AdminView = (props) => {
     return (
         <div className="viewer">
             <Arena registry={registry} width={600} height={600} />
-            <Controls registry={registry} />
+            <Controls registry={registry.robots} />
         </div>
     );
 };

@@ -18,8 +18,7 @@ class GraphBuffer {
     }
 
     update() {
-        this.smoothY += (this.currY - this.smoothY) / Math.max(this.smooth, 1);
-        this.buffer.push(this.smoothY);
+        this.buffer.push(this.currY);
     }
 
     points() {
@@ -28,22 +27,18 @@ class GraphBuffer {
 
         const points = this.buffer.toArray().map((y, x) => [
             x * scaleX,
-            map_range(1 - y, this.range.min, this.range.max, 0, scaleY)
+            map_range(y, this.range.max, this.range.min, 0, scaleY)
         ]);
 
         return points;
     }
 
+    setRange(newRange) {
+        this.range = newRange;
+    }
+
     addValue(currY) {
-        if (this.tween)
-            this.tween.pause();
-            
-        this.tween = anime({
-            targets: this,
-            currY,
-            duration: this.smooth * 30,
-            easing: 'easeInQuad'
-        });
+        this.currY = currY;
     }
 
     size() {

@@ -58,7 +58,7 @@ const ActionWidget = ({ id, color }) => {
             </div>
 
             <div className="widget__values">
-                <Value tag={`${id} reward`} label="R" disabled={disabled}></Value>
+                <Value param={`${id} reward`} disabled={disabled}></Value>
             </div>
         </div>
     );

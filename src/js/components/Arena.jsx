@@ -2,10 +2,7 @@ import React, { forwardRef, useEffect, useRef, useState, createRef } from 'react
 
 import Robot from './Robot';
 
-const Arena = (props, ref) => {
-    // props
-    const { width = 600, height = 600, registry } = props;
-
+const Arena = ({ width = 600, height = 600, registry }, ref) => {
     // states
     const [robots, setRobots] = useState([]);
     const [robotRefs, setRobotRefs] = useState([]);

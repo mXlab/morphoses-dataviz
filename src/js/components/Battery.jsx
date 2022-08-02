@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import BatterySVG from '../../assets/battery.svg';
+import { map_range } from '../utils';
 
+import BatterySVG from '../../assets/battery.svg';
 import EventManager from '../managers/EventManager';
 
-const Battery = (props) => {
-    // props
-    const {
-        id,
-        active,
-        color
-    } = props;
-
+const Battery = ({ id, active, color }) => {
     // states
-    const [batteryLevel, setBatteryLevel] = useState(0);
+    // battery level is in volts (10V = DIED)
+    const [batteryLevel, setBatteryLevel] = useState(10);
 
     // on mount
     useEffect(() => {
@@ -26,11 +21,12 @@ const Battery = (props) => {
         "battery",
         { "battery--inactive": !active }
     );
+    const toPercent = Math.min(Math.round(map_range(batteryLevel, 10, 12.5, 0, 100)), 100);
 
     return (
         <span className={className}>
-            {active ? `${batteryLevel}%` : `N/A`}
-            <BatterySVG style={{ color, "--level": batteryLevel/100 }}></BatterySVG>
+            {active ? `${toPercent}%` : `N/A`}
+            <BatterySVG style={{ color, "--level": toPercent / 100 }}></BatterySVG>
         </span>
     );
 };

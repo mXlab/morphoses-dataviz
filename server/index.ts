@@ -12,6 +12,7 @@ import SocketManager from './scripts/SocketManager';
 import EventHandler from './scripts/EventHandler';
 // expressjs routes
 import routes from './routes';
+import MQTTManager from './scripts/MQTTManager';
 
 
 // configure .env
@@ -41,6 +42,15 @@ OscManager.start({
     remoteAddress: process.env.OSCOUT_HOST,     // out host,
     remotePort: process.env.OSCOUT_PORT         // out port
 }, EventHandler);
+
+MQTTManager.start(process.env.MQTT_HOST, process.env.MQTT_PORT);
+
+/*
+subscribe to
+dwm/node/[id]/uplink/location
+@return string [JSON]
+
+*/
 
 
 // begin listening on http port

@@ -7,6 +7,8 @@ class Graph extends React.Component {
     constructor(props) {
         super(props);
 
+        this.range = this.props.range;
+
         // bindings
         this.update = ::this.update;
 
@@ -76,6 +78,19 @@ class Graph extends React.Component {
     }
 
     addValue(currY) {
+        // dynamic range
+        if(currY > this.range.max)
+        {
+            this.range.max = currY;
+            this.buffer.setRange(this.range);
+        }
+        if(currY < this.range.min)
+        {
+            this.range.min = currY;
+            this.buffer.setRange(this.range);
+        }
+
+        // add value to buffer
         this.buffer.addValue(currY);
     }
 }

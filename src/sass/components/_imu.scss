@@ -1,0 +1,66 @@
+.imu {
+    font-family: "Inconsolata", monospace;
+    font-weight: bold;
+    
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    transition: 0.5s ease;
+    transition-property: background-color, opacity, border-color;
+
+    &__type {
+        font-size: 14px;
+    }
+
+    &__margin {
+        font-size: 11px;
+    }
+
+    &__frame {
+        border: 1px solid black;
+        padding: 4px 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-grow: 1;
+
+        .panel--inactive & {
+            background:rgba(0, 0, 0, 0.1);
+            border-color: transparent;
+        }
+    }
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+
+    &__status {
+        display: flex;
+        gap: 2px;
+
+        .bar {
+            width: 3px;
+            height: 10px;
+            color: var(--robot-color);
+            background-color: currentColor;
+            opacity: 0.25;
+            
+            &--active {
+                opacity: 1;
+            }
+        }
+    }
+
+    .panel--inactive & {
+        opacity: 0.25;
+    }
+
+    .panel.collapsed & {
+        &__type, &__margin { display: none; }
+        &__container { flex-direction: row; }
+    }
+}

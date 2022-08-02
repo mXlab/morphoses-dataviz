@@ -1,0 +1,59 @@
+.speedsteer {
+    padding: 18px 20px;
+    position: relative;
+    display: inline-block;
+    
+    .arrow {
+        position: absolute;
+
+        // dynamic color changeing :))))
+        color: var(--robot-color);
+        filter: saturate(var(--val));
+        opacity: var(--val);
+
+        // svg haxx
+        * { fill: currentColor; }
+
+        // rotations
+        &--up {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        &--right {
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%) rotate(90deg);
+        }
+        &--down {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) rotate(180deg);
+        }
+        &--left {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+        }
+    }
+
+    .wheel {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid black;
+
+        &__core {
+            display: inline-block;
+            position: relative;
+            top: 8px;
+            left: 8px;
+            width: 30px;
+            height: 30px;
+
+            border-radius: 50%;
+            background-color: var(--robot-color);
+        }
+    }
+}

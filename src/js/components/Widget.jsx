@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Value from './Value';
 
-const Widget = ({ name, tag, param, size }) => {
+const Widget = ({ name, tag, param, size, children }) => {
     // states
     const [disabled, setDisabled] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
@@ -16,15 +16,15 @@ const Widget = ({ name, tag, param, size }) => {
     ]);
 
     // Value objects, fed from props
-    const values = Array.apply(null, Array(size)).map((x, i) => (
-        <Value
-            key={`${tag} ${param}${i}`}
-            tag={`${tag} ${param}`}
-            subparam={"xyzw".charAt(i)}
-            label={"XYZW".charAt(i)}
-            disabled={disabled}
-        ></Value>
-    ));
+    // const values = Array.apply(null, Array(size)).map((x, i) => (
+    //     <Value
+    //         key={`${tag} ${param}${i}`}
+    //         tag={`${tag} ${param}`}
+    //         subparam={"xyzw".charAt(i)}
+    //         label={"XYZW".charAt(i)}
+    //         disabled={disabled}
+    //     ></Value>
+    // ));
 
     // render
     return (
@@ -35,7 +35,7 @@ const Widget = ({ name, tag, param, size }) => {
                 <span className="widget__addr">{`/${tag}/${param}`}</span>
             </div>
 
-            <div className="widget__values">{values}</div>
+            <div className="widget__values">{children}</div>
         </div>
     )
 };

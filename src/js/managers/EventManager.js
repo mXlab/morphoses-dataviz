@@ -6,6 +6,10 @@ export default class EventManager {
 
         // initialize socket
         this.socket = io();
+        this.socket.on("connect", () => {
+            this.socket.on(this.socket.id + "__anchors", data => {
+            });
+        });
         this.listeners = [];
     }
 
