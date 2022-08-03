@@ -4,11 +4,11 @@ import Lop from './Lop';
 import React, { useState, useReducer, useRef, useEffect, useCallback } from "react";
 import classNames from "classnames";
 
-const Value = ({ param, subparam, label, disabled, precision = 3, range = { min: 0, max: 1 } }) => {
+const Value = ({ param, subparam, label, disabled, smooth = 250, initial = 0, precision = 3, range = { min: 0, max: 1 } }) => {
     // using reducer to improve performance and issues w/ heap size incrementing over time
     const reducer = (oldValue, newValue) => newValue;
-    const [value, dispatchValue] = useReducer(reducer, 0.0);
-    const [lop] = useState(() => new Lop(250, 0));
+    const [value, dispatchValue] = useReducer(reducer, initial);
+    const [lop] = useState(() => new Lop(smooth, initial));
     // simple stuff LOL
     const [showGraph, setShowGraph] = useState(false);
 

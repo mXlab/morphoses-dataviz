@@ -1,7 +1,7 @@
 import { OscMessage, RobotArgs } from './types';
 import SocketManager from './SocketManager';
 
-export default (robotId: Number, msg: OscMessage) => {
+export const processRobotData = (robotId: Number, msg: OscMessage) => {
     const robotTag = `robot${robotId}`;
     
     // we have received a message; the robot can be marked active
@@ -9,6 +9,11 @@ export default (robotId: Number, msg: OscMessage) => {
 
     // pattern matching time :3
     switch (msg.address) {
+        case '/ready':
+        {
+            console.log("ready");
+        }
+
         // battery level
         case '/battery':
         {
@@ -24,14 +29,6 @@ export default (robotId: Number, msg: OscMessage) => {
             const [status, margin] = msg.args;
             const type = msg.address.split('/')[1];
             SocketManager.emit(`${robotTag} ${type} accur`, { status, margin });
-            break;
-        }
-        
-        // position
-        case '/position':
-        {
-            const [x, y] = msg.args;
-            SocketManager.emit(`${robotTag} pos`, { x, y });
             break;
         }
         
@@ -53,19 +50,37 @@ export default (robotId: Number, msg: OscMessage) => {
             SocketManager.emit(`${robotTag} ${type === "main" ? "mrot" : "rot"}`, { x, y, z });
             break;
         }
+    }
+};
 
-        case '/reward':
+export const processMLData = (msg: OscMessage) => {
+    const robotTag = msg.address.split("/")[1];
+
+    // we have received a message; the robot can be marked active
+    SocketManager.emit(`${robotTag} active`);
+
+    
+    // extract value type
+    const type = msg.address.split("/")[2];
+    if (!type) return;
+
+    // pattern matching
+    switch (type) {
+        case 'reward':
+        case 'action':
+        case 'speed':
+        case 'steer':
         {
-            const [reward] = msg.args;
-            SocketManager.emit(`${robotTag} reward`, reward);
+            // these are all single values so we can parse them the same
+            const [value] = msg.args;
+            SocketManager.emit(`${robotTag} ${type}`, value);
             break;
         }
 
-        case '/action':
+        default:
         {
-            const [action] = msg.args;
-            SocketManager.emit(`${robotTag} action`, action);
+            console.log(msg.address);
             break;
         }
     }
-};
+}

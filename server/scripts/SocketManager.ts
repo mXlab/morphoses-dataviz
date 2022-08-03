@@ -14,6 +14,25 @@ export default class SocketManager {
             // send out anchor data to the client that just connected (and only that client)
             socket.emit(socket.id + "__anchors", JSON.stringify(MQTTManager.getAnchorData()));
 
+            // TODO:
+            // - calibrate action (send to respective robot)
+            // - stop everything action (idem)
+            // - toggle OSC streaming (idem)
+            // - reboot ESP action
+
+            socket.on("calibrate", () => {
+                console.log("calibrate");
+            });
+
+            socket.on("toggleOSC", () => {
+                console.log("toggleOSC");
+            });
+
+            socket.on("reboot", id => {
+                const idx = parseInt(id.charAt(id.length - 1));
+                OscManager.sendToRobot(idx-1, "/reboot");
+            });
+
             // toggle on/off sending OSC values
             // this is received by the Python sketch and treated internally
             // the naming convention will always be the original OSC address

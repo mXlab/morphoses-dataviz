@@ -20,18 +20,6 @@ const Arena = ({ width = 600, height = 600, registry, anchorData }, ref) => {
         setCanvas(trailsRef.current);
         setCtx(trailsRef.current.getContext("2d"));
 
-        
-        // create robots
-        for (let i = 0; i < registry.length; i++) {
-            const {id, name, color} = registry[i];
-            
-            const robotRef = createRef();
-            const robot = <Robot ref={robotRef} key={id} id={id} canvas={canvas} name={name} color={color} />;
-        
-            setRobots(oldRobots => [...oldRobots, robot]);
-            setRobotRefs(oldRefs => [...oldRefs, robotRef]);
-        }
-
 
         // calculate dimensions
         let minX=0, maxX=0, minY=0, maxY=0;
@@ -45,7 +33,20 @@ const Arena = ({ width = 600, height = 600, registry, anchorData }, ref) => {
         maxX += 0.5;
         minY -= 0.5;
         maxY += 0.5;
-        setDimensions({ minX, maxX, minY, maxY });
+        const dimensions = { minX, maxX, minY, maxY };
+        setDimensions(dimensions);
+
+        
+        // create robots
+        for (let i = 0; i < registry.length; i++) {
+            const {id, name, color} = registry[i];
+            
+            const robotRef = createRef();
+            const robot = <Robot dimensions={dimensions} ref={robotRef} key={id} id={id} canvas={canvas} name={name} color={color} />;
+        
+            setRobots(oldRobots => [...oldRobots, robot]);
+            setRobotRefs(oldRefs => [...oldRefs, robotRef]);
+        }
     }, [registry]);
 
 

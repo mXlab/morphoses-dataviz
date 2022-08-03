@@ -37,8 +37,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 8px;
 
-        button {
+        &__tag {
             background-color: var(--robot-color);
             color: white;
             font-family: "Inconsolata", sans-serif;
@@ -52,13 +53,8 @@
             transition-property: background-color, color, opacity;
             
             .collapsed & {
-                padding: 10px 14px;
+                padding: 12px 14px;
             }
-        }
-
-        // alignments
-        .imu__container {
-            margin-left: 8px;
         }
 
         .battery {

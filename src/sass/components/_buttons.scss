@@ -1,0 +1,26 @@
+.reboot-button {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+
+    border: 1px solid black;
+    border-radius: 50%;
+    box-sizing: content-box;
+    background: transparent;
+
+    transition: 0.1s ease;
+    transition-property: border-color, background-color, color;
+    
+    svg * { fill: currentColor; }
+
+    &:hover, &:focus {
+        background-color: var(--robot-color);
+        border-color: transparent;
+        color: white;
+    }
+
+    &:active {
+        filter: brightness(0.75);
+    }
+
+}

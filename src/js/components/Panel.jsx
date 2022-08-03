@@ -5,6 +5,7 @@ import SimpleBar from 'simplebar-react';
 import Battery from './Battery';
 import IMU from './IMU';
 import EventManager from '../managers/EventManager';
+import RebootButton from './RebootButton.jsx';
 
 const Panel = ({ id, name, color, children }) => {
     // states
@@ -40,20 +41,19 @@ const Panel = ({ id, name, color, children }) => {
     // class names
     const className = classNames([
         "panel",
-        { collapsed },
         { "panel--inactive": !active }
     ]);
-    // rendered name
-    const formattedName = collapsed ?
-        name.charAt(0) + name.charAt(name.length - 1) :
-        name;
 
     // render
     return (
         <div className={className} style={panelStyle}>
             <div className="panel__header">
-                <button onClick={() => setCollapsed(!collapsed)}>{formattedName}</button>
+                <button className="panel__header__tag" onClick={() => setCollapsed(!collapsed)}>
+                    {name.charAt(0) + name.charAt(name.length - 1)}
+                </button>
                 
+                <RebootButton id={id}></RebootButton>
+
                 <div className="imu__container">
                     <IMU id={id} type="main"></IMU>
                     <IMU id={id} type="side"></IMU>

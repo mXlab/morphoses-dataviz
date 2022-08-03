@@ -11,6 +11,10 @@ class Lop {
 
     // set value
     set(v) {
+        if (isNaN(v)) {
+            console.log("not a number", v);
+            return;
+        }
         this.v = v;
     }
 

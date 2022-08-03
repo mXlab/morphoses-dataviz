@@ -19,8 +19,8 @@ const Controls = (props) => {
                         <ActionWidget id={id} color={color}></ActionWidget>
 
                         <Widget name="Position" tag={id} param="pos">
-                            <Value param={`${id} pos`} subparam="x" label="X" />
-                            <Value param={`${id} pos`} subparam="y" label="Y" />
+                            <Value param={`${id} pos`} subparam="x" label="X" smooth={500} />
+                            <Value param={`${id} pos`} subparam="y" label="Y" smooth={500} />
                         </Widget>
 
                         <Widget name="Quaternion" tag={id} param="quat">

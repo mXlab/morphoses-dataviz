@@ -9,7 +9,7 @@ import { OscMessage, Route } from './scripts/types';
 // static classes
 import OscManager from './scripts/OscManager';
 import SocketManager from './scripts/SocketManager';
-import EventHandler from './scripts/EventHandler';
+import { processRobotData, processMLData } from './scripts/EventHandler';
 // expressjs routes
 import routes from './routes';
 import MQTTManager from './scripts/MQTTManager';
@@ -33,24 +33,10 @@ routes.forEach((route: Route) => {
 });
 
 
-// configure socket.io
+// configure managers (in order)
 SocketManager.start(server);
-// configure OSC server
-OscManager.start({
-    localAddress: process.env.OSCIN_HOST,       // in host
-    localPort: process.env.OSCIN_PORT,          // in port,
-    remoteAddress: process.env.OSCOUT_HOST,     // out host,
-    remotePort: process.env.OSCOUT_PORT         // out port
-}, EventHandler);
-
+OscManager.start(processRobotData, processMLData);
 MQTTManager.start(process.env.MQTT_HOST, process.env.MQTT_PORT);
-
-/*
-subscribe to
-dwm/node/[id]/uplink/location
-@return string [JSON]
-
-*/
 
 
 // begin listening on http port
