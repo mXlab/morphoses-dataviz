@@ -1,6 +1,5 @@
 // very similar to Graph except it fades over time
 import CBuffer from "CBuffer";
-
 import { BALL_SIZE } from '../utils/settings';
 
 
@@ -12,6 +11,9 @@ export default class RobotTrail {
         this.xs = new CBuffer(this.numPoints);
         this.ys = new CBuffer(this.numPoints);
 
+        this.currX = 0;
+        this.currY = 0;
+
         this.trailing = true;
     }
 
@@ -20,11 +22,15 @@ export default class RobotTrail {
     }
 
     push({x, y}) {
-        this.xs.push(x);
-        this.ys.push(y);
+        this.currX = x;
+        this.currY = y;
     }
 
     generatePoints(width, height, density = 1) {
+        // add current values to buffer
+        this.xs.push(this.currX);
+        this.ys.push(this.currY);
+
         let flatX = this.xs.toArray();
         // set to range
         flatX = flatX.map(x => x * (width - BALL_SIZE) + (BALL_SIZE/2)).filter((x, i) => (i % density === 0) || (i === flatX.length-1));

@@ -1,11 +1,11 @@
 import React, { forwardRef, useEffect, useRef, useState, createRef } from 'react';
-import { map_range } from '../utils';
 import Robot from './Robot';
+import Anchor from './Anchor';
 
 const Arena = ({ width = 600, height = 600, registry, anchorData }, ref) => {
     // states
     const [robots, setRobots] = useState([]);
-    const [robotRefs, setRobotRefs] = useState([]);
+    const [anchors, setAnchors] = useState([]);
     const [canvas, setCanvas] = useState();
     const [ctx, setCtx] = useState();
     const [dimensions, setDimensions] = useState({});
@@ -36,17 +36,29 @@ const Arena = ({ width = 600, height = 600, registry, anchorData }, ref) => {
         const dimensions = { minX, maxX, minY, maxY };
         setDimensions(dimensions);
 
+
+        // create anchors
+        const tempAnchors = [];
+        for (let i = 0; i < anchorData.length; i++) {
+            const { x, y } = anchorData[i];
+
+            const anchorRef = createRef();
+            const anchor = <Anchor key={"anchor" + i} x={x} y={y} ref={anchorRef}></Anchor>;
+            tempAnchors.push(anchor);
+        }
+        setAnchors(tempAnchors);        // only set it once...
+
         
         // create robots
+        const tempRobots = [];
         for (let i = 0; i < registry.length; i++) {
             const {id, name, color} = registry[i];
             
             const robotRef = createRef();
             const robot = <Robot dimensions={dimensions} ref={robotRef} key={id} id={id} canvas={canvas} name={name} color={color} />;
-        
-            setRobots(oldRobots => [...oldRobots, robot]);
-            setRobotRefs(oldRefs => [...oldRefs, robotRef]);
+            tempRobots.push(robot);
         }
+        setRobots(tempRobots);      // only set it once...
     }, [registry]);
 
 
@@ -71,15 +83,10 @@ const Arena = ({ width = 600, height = 600, registry, anchorData }, ref) => {
         // robotRefs.forEach(({current:robot}) => robot.renderCanvasTrail(ctx, width, height));
 
         // anchors
-        ctx.fillStyle = "lightblue";
-        anchorData.forEach(({ x, y }) => {
-            ctx.beginPath();
-            ctx.arc(
-                map_range(x, dimensions.minX, dimensions.maxX, 0, width),
-                map_range(y, dimensions.minY, dimensions.maxY, height, 0),
-                4, 0, Math.PI * 2
-            );
-            ctx.fill();
+        // this is the ideal technique for running functions off react components btw :3
+        // attach an arbitrary ref to it and make sure its rendered, even if nothing is in it
+        anchors.forEach(a => {
+            a.ref.current?.draw(ctx, dimensions, width, height);
         });
         
         requestAnimationFrame(loop);
@@ -95,6 +102,7 @@ const Arena = ({ width = 600, height = 600, registry, anchorData }, ref) => {
     return (
         <div className="arena">
             {robots}
+            {anchors}
             <canvas
                 className="trails"
                 width={width * window.devicePixelRatio}

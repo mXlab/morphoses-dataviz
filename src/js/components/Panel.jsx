@@ -5,19 +5,21 @@ import SimpleBar from 'simplebar-react';
 import Battery from './Battery';
 import IMU from './IMU';
 import EventManager from '../managers/EventManager';
-import RebootButton from './RebootButton.jsx';
+import PowerButton from './PowerButton';
+import CalibrateButton from './CalibrateButton';
 
 const Panel = ({ id, name, color, children }) => {
     // states
     const [collapsed, setCollapsed] = useState(false);
-    const [active, setActive] = useState(false);
+    const [active, setActive] = useState(true);
 
 
     // create timer
     const time = new Date();
     time.setSeconds(time.getSeconds() + 5);
     const { restart } = useTimer({ expiryTimestamp: time, onExpire: () => {
-        setActive(false);
+        // setActive(false);
+        // EventManager.emit("disconnected", id);
     } });
 
 
@@ -52,7 +54,8 @@ const Panel = ({ id, name, color, children }) => {
                     {name.charAt(0) + name.charAt(name.length - 1)}
                 </button>
                 
-                <RebootButton id={id}></RebootButton>
+                <PowerButton id={id} initActive={active}></PowerButton>
+                <CalibrateButton id={id}></CalibrateButton>
 
                 <div className="imu__container">
                     <IMU id={id} type="main"></IMU>

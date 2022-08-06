@@ -64,19 +64,20 @@ const Value = ({ param, subparam, label, disabled, smooth = 250, initial = 0, pr
     ]);
 
     const graph = showGraph
-                  ? <Graph disabled={disabled} ref={graphRef} initialValue={value} range={range} />
+                  ? <Graph className="value__graph" disabled={disabled} ref={graphRef} initialValue={value} range={range} />
                   : null;
 
     return (<>
         <div className={valueClass} data-key={param} data-disabled={disabled}>
-            { label ? <span className="label">{label}</span> : null }
-            <span className="number">{value}</span>
+            { label ? <span className="value__label">{label}</span> : null }
+            <div className="value__container">
+                <span className="value__number">{value}</span>
+                {graph}
+            </div>
 
-            <button className="show-graph" onClick={() => setShowGraph(!showGraph)}>
+            <button className="value__show-graph" onClick={() => setShowGraph(!showGraph)}>
                 <img src="/images/graph_icon.svg" alt="Toggle graph" />
             </button>
-
-            {graph}
         </div>
     </>);
 }

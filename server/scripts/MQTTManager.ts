@@ -58,6 +58,11 @@ export default class MQTTManager {
         const [,,id,,type] = topic.split("/");
 
         if (type === "config") {
+            // do not add if its already in the dictionary
+            if (this.positions.some(({ id: id_ }) => id_ === id)) {
+                return;
+            }
+
             const json = JSON.parse(message.toString());
             const { x, y, z } = json.configuration.anchor.position;
 

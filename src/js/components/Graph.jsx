@@ -44,7 +44,7 @@ class Graph extends React.Component {
             this.reqID = requestAnimationFrame(this.update);
 
         return (
-            <div className="graph" style={canvasStyle}>
+            <div className={this.props.className} style={canvasStyle}>
                 <canvas
                     width={this.props.width * window.devicePixelRatio}
                     height={this.props.height * window.devicePixelRatio}
@@ -96,8 +96,8 @@ class Graph extends React.Component {
 }
 
 Graph.defaultProps = {
-    width: 135,                     // width of SVG
-    height: 35,                     // height of SVG
+    width: 120,                     // width of SVG
+    height: 25,                     // height of SVG
     domain: 10000,                  // history in milliseconds
     range: { min: 0, max: 1 },      // vertical/horizontal range
     smooth: 0,                      // smooth value

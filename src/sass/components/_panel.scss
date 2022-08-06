@@ -81,16 +81,14 @@
     }
 
     &--inactive {
-        .panel__header button {
+        .panel__header button, &::after {
             background: rgba(0, 0, 0, 0.1);
-            color: var(--robot-color);
             opacity: 0.25;
+            border-color: transparent;
         }
 
-        &::after {
-            border-color: transparent;
-            background:rgba(0, 0, 0, 0.1);
-            opacity: 0.25;
+        .panel__header__tag {
+            color: var(--robot-color);
         }
         
         pointer-events: none;

@@ -20,17 +20,25 @@ export default class SocketManager {
             // - toggle OSC streaming (idem)
             // - reboot ESP action
 
-            socket.on("calibrate", () => {
-                console.log("calibrate");
+            socket.on("calibrate", (id, state) => {
+                switch (state) {
+                    
+                }
             });
 
-            socket.on("toggleOSC", () => {
+            socket.on("toggleOSC", id => {
                 console.log("toggleOSC");
             });
 
             socket.on("reboot", id => {
-                const idx = parseInt(id.charAt(id.length - 1));
-                OscManager.sendToRobot(idx-1, "/reboot");
+                OscManager.sendToRobot(id, "/reboot");
+            });
+
+            socket.on("disconnected", id => {
+                console.log(id + " has disconnected...");
+                // resend bonjour
+                // TODO: periodic ping until reconnection is confirmed
+                OscManager.queuePing(id);
             });
 
             // toggle on/off sending OSC values

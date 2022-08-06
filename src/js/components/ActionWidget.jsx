@@ -38,7 +38,6 @@ const ActionWidget = ({ id, color }) => {
             <div className="widget__header">
                 <button className="widget__toggle" onClick={() => setDisabled(!disabled)}></button>
                 <h2 className="widget__title"><button onClick={() => setCollapsed(!collapsed)}>Action</button></h2>
-                <span className="widget__addr">{`/${id}/action`}</span>
             </div>
 
             <div className="widget__actions">
@@ -54,7 +53,6 @@ const ActionWidget = ({ id, color }) => {
 
             <div className="widget__header">
                 <h2 className="widget__title">Reward</h2>
-                <span className="widget__addr">{`/${id}/reward`}</span>
             </div>
 
             <div className="widget__values">

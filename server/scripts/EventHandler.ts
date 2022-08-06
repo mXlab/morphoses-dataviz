@@ -1,17 +1,19 @@
-import { OscMessage, RobotArgs } from './types';
+import { OscMessage } from './types';
 import SocketManager from './SocketManager';
+import OscManager from './OscManager';
 
 export const processRobotData = (robotId: Number, msg: OscMessage) => {
     const robotTag = `robot${robotId}`;
-    
+
     // we have received a message; the robot can be marked active
     SocketManager.emit(`${robotTag} active`);
 
     // pattern matching time :3
     switch (msg.address) {
-        case '/ready':
+        case '/bonjour':
         {
-            console.log("ready");
+            const [id, ipAddr] = msg.args;
+            OscManager.cancelPing(id);
         }
 
         // battery level
@@ -79,7 +81,7 @@ export const processMLData = (msg: OscMessage) => {
 
         default:
         {
-            console.log(msg.address);
+            // console.log(msg.address);
             break;
         }
     }

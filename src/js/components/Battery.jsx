@@ -21,10 +21,10 @@ const Battery = ({ id, active, color }) => {
         "battery",
         { "battery--inactive": !active }
     );
-    const toPercent = Math.min(Math.round(map_range(batteryLevel, 10, 12.5, 0, 100)), 100);
+    const toPercent = Math.max(0, Math.min(100, Math.round(map_range(batteryLevel, 10, 12.5, 0, 100))));
 
     return (
-        <span className={className}>
+        <span className={className} title={`${batteryLevel.toFixed(1)}V`}>
             {active ? `${toPercent}%` : `N/A`}
             <BatterySVG style={{ color, "--level": toPercent / 100 }}></BatterySVG>
         </span>

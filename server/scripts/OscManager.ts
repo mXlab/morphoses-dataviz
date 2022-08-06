@@ -9,7 +9,8 @@ export default class OscManager
 {
     // members
     mlPort: typeof UDPPort;
-    robotPorts: Array<typeof UDPPort> = [];
+    robotPorts: Map<String, typeof UDPPort>;
+    timers: Map<String, NodeJS.Timer>;
 
     localAddress: String;
     localPort: String;
@@ -28,6 +29,8 @@ export default class OscManager
         // set callback
         this.robotCallback = robotCallback;
         this.mlCallback = mlCallback;
+
+        this.timers = new Map<String, NodeJS.Timer>();
 
         // configure
         this.configureMLPort();
@@ -76,6 +79,9 @@ export default class OscManager
      * retrieving such infos as realtime IMU data, battery, etc.
      */
     configureRobotPorts() {
+        // initialize map object
+        this.robotPorts = new Map<String, typeof UDPPort>();
+
         // initialize robot ports
         for (let i = 1; i <= 3; i++) {
             // configure
@@ -107,11 +113,11 @@ export default class OscManager
             // open port
             port.open();
             // query info receive
-            // TODO: reconnect if necessary
-            // port.send({ address: "/bonjour" });
+            // TODO: reconnect if necessary (will not  be necessary ☺️)
+            port.send({ address: "/bonjour" });
 
             // add to array of ports
-            this.robotPorts.push(port);
+            this.robotPorts.set("robot" + i, port);
         }
     }
 
@@ -120,17 +126,45 @@ export default class OscManager
         OscManager.instance = new OscManager(robotCallback, mlCallback);
     }
 
-    static sendToRobot(idx: number, address: string, args?: any) {
+    static sendToRobot(id: String, address: string, args?: any) {
         const _this = OscManager.instance;
 
+        // get index
+        const idx = parseInt(id.charAt(id.length - 1)) - 1;
+
         // check if index within bounds
-        if (idx < 0 || idx >= _this.robotPorts.length) {
-            console.error(chalk.bold.red("ERROR") + `robot port at index ${idx} was not found`);
-            console.trace();
+        if (idx < 0 || idx >= _this.robotPorts.size) {
+            console.error(chalk.bold.red("ERROR") + `\trobot port at index ${idx} was not found`);
+            console.trace()
             return;
         }
 
         // send to appropriate port
-        _this.robotPorts[idx].send({ address, args });
+        _this.robotPorts.get(id).send({ address, args });
+    }
+
+    /**
+     * Start queueing a reconnection if it is ever lost
+     * @param id 
+     */
+    static queuePing(id: String) {
+        const _this = OscManager.instance;
+
+        if (!_this.timers.get(id))      // make sure we arent duplicating...
+            {
+            _this.timers.set(id, setInterval(() => {
+                console.log("repinging " + id + "...");
+                OscManager.sendToRobot(id, "/bonjour");
+            }, 2000));
+        }
+    }
+
+    /**
+     * Cancel a pinging 
+     * @param id 
+     */
+    static cancelPing(id: String) {
+        const _this = OscManager.instance;
+        clearInterval(_this.timers.get(id));
     }
 }

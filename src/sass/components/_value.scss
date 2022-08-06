@@ -1,25 +1,25 @@
 .value {
     display: flex;
-    column-gap: 0.5rem;
-    align-items: center;
+    align-items: flex-start;
+    column-gap: 8px;
+    font-family: "Inconsolata", monospace;
+    font-weight: bold;
 
-    .label {
-        width: 20px;
-        font-size: 16px;
+    &__label {
+        font-size: 12px;
+        line-height: 25px;
 
         .collapsed & {
             display: none;
         }
     }
 
-    .number {
-        width: 100px;
-        height: 35px;
+    &__number {
+        width: 75px;
+        height: 25px;
         border: 1px solid black;
-        padding-left: 0.5rem;
-        font-size: 20px;
-        font-family: "Inconsolata", monospace;
-        font-weight: bold;
+        padding-left: 8px;
+        font-size: 14px;
         
         display: flex;
         align-items: center;
@@ -33,11 +33,16 @@
             width: 42px;
             height: auto;
         }
+
+        .graph-visible & {
+            width: 120px;
+        }
     }
 
-    .graph {
+    &__graph {
         border: 1px solid black;
         margin-left: auto;          // so that it aligns to the right
+        margin-top: -1px;
 
         canvas {
             width: 100%;
@@ -48,23 +53,30 @@
             display: none;
         }
     }
+
+    &__show-graph {
+        background-color: transparent;
+        outline: none;
+        border: none;
+        opacity: 0.5;
+        margin-left: -8px;
+    
+        &:hover {
+            opacity: 1;
+        }
+
+        .collapsed & {
+            display: none;
+        }
+    
+        .graph-visible & {
+            opacity: 1;
+            transform: translateX(-100%) scaleX(-1);
+        }
+    
+        > img {
+            display: block;
+        }
+    }
 }
 
-.show-graph {
-    background-color: transparent;
-    outline: none;
-    border: none;
-    opacity: 0.5;
-
-    .collapsed & {
-        display: none;
-    }
-
-    &:hover, .graph-visible & {
-        opacity: 1;
-    }
-
-    > img {
-        display: block;
-    }
-}

@@ -45,7 +45,7 @@
     }
 
     &__title {
-        font-size: 24px;
+        font-size: 20px;
 
         > button {
             background: transparent;
@@ -60,7 +60,7 @@
         }
 
         .collapsed & {
-            font-size: 18px;
+            font-size: 16px;
         }
     }
 
@@ -75,8 +75,10 @@
 
     &__values {
         display: flex;
-        flex-direction: column;
-        row-gap: 20px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 20px;
+        row-gap: 12px;
 
         .disabled & {
             opacity: 0.25;
