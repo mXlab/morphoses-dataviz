@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import CBuffer from 'CBuffer';
 import EventManager from '../managers/EventManager';
 import Value from './Value';
+import SpeedSteer from './SpeedSteer';
 
 const ActionWidget = ({ id, color }) => {
     // da states
@@ -37,7 +38,7 @@ const ActionWidget = ({ id, color }) => {
         <div className={widgetClass}>
             <div className="widget__header">
                 <button className="widget__toggle" onClick={() => setDisabled(!disabled)}></button>
-                <h2 className="widget__title"><button onClick={() => setCollapsed(!collapsed)}>Action</button></h2>
+                <h2 className="widget__title"><button onClick={() => setCollapsed(!collapsed)}>Behavior</button></h2>
             </div>
 
             <div className="widget__actions">
@@ -51,12 +52,17 @@ const ActionWidget = ({ id, color }) => {
 
             <div className="line"></div>
 
-            <div className="widget__header">
-                <h2 className="widget__title">Reward</h2>
-            </div>
+            <div className="reward-steer-container">
+                <div className="widget__values reward-container">
+                    <Value param={`${id} reward moment`} label="I" disabled={disabled}></Value>
+                    <Value param={`${id} reward smooth`} label="S" disabled={disabled}></Value>
+                </div>
 
-            <div className="widget__values">
-                <Value param={`${id} reward`} disabled={disabled}></Value>
+                <div className="line"></div>
+
+                <div className="speedsteer__container">
+                    <SpeedSteer id={id}></SpeedSteer>
+                </div>
             </div>
         </div>
     );

@@ -2,6 +2,11 @@
     padding: 18px 20px;
     position: relative;
     display: inline-block;
+
+    &__container {
+        display: flex;
+        justify-content: center;
+    }
     
     .arrow {
         position: absolute;

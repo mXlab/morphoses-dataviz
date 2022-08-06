@@ -137,6 +137,24 @@
 
     .line {
         border-bottom: 1px solid black;
-        margin: 16px 0;
+        margin: 12px 0;
+    }
+
+    .reward-steer-container {
+        display: flex;
+        align-items: center;
+
+        .line {
+            border-bottom: none;
+            border-left: 1px solid black;
+
+            align-self: stretch;
+            margin: -12px 0;
+        }
+
+        > div:not(.line) {
+            flex-basis: 50%;
+            flex-grow: 0;
+        }
     }
 }

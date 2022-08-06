@@ -5,7 +5,7 @@ import { map_range } from '../utils';
 import BatterySVG from '../../assets/battery.svg';
 import EventManager from '../managers/EventManager';
 
-const Battery = ({ id, active, color }) => {
+const Battery = ({ id, active }) => {
     // states
     // battery level is in volts (10V = DIED)
     const [batteryLevel, setBatteryLevel] = useState(10);
@@ -26,7 +26,7 @@ const Battery = ({ id, active, color }) => {
     return (
         <span className={className} title={`${batteryLevel.toFixed(1)}V`}>
             {active ? `${toPercent}%` : `N/A`}
-            <BatterySVG style={{ color, "--level": toPercent / 100 }}></BatterySVG>
+            <BatterySVG style={{ "--level": toPercent / 100 }}></BatterySVG>
         </span>
     );
 };

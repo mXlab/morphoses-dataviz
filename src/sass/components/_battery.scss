@@ -7,6 +7,10 @@
     column-gap: 8px;
     margin-right: 16px;
 
+    svg {
+        color: var(--robot-color);
+    }
+
     &_svg {
         &__bar {
             display: none;

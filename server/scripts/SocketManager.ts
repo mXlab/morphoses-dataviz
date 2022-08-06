@@ -20,9 +20,19 @@ export default class SocketManager {
             // - toggle OSC streaming (idem)
             // - reboot ESP action
 
-            socket.on("calibrate", (id, state) => {
-                switch (state) {
+            socket.on("calibrate", ({id, action}) => {
+                switch (action) {
+                    case 0:     // begin
+                        OscManager.sendToRobot(id, "/calibrate-begin");
+                        break;
                     
+                    case 1:     // save
+                        OscManager.sendToRobot(id, "/calibrate-save");
+                        break;
+
+                    case 2:     // end
+                        OscManager.sendToRobot(id, "/calibrate-end");
+                        break;
                 }
             });
 

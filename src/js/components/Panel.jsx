@@ -11,15 +11,15 @@ import CalibrateButton from './CalibrateButton';
 const Panel = ({ id, name, color, children }) => {
     // states
     const [collapsed, setCollapsed] = useState(false);
-    const [active, setActive] = useState(true);
+    const [active, setActive] = useState(false);
 
 
     // create timer
     const time = new Date();
     time.setSeconds(time.getSeconds() + 5);
     const { restart } = useTimer({ expiryTimestamp: time, onExpire: () => {
-        // setActive(false);
-        // EventManager.emit("disconnected", id);
+        setActive(false);
+        EventManager.emit("disconnected", id);
     } });
 
 
@@ -62,7 +62,7 @@ const Panel = ({ id, name, color, children }) => {
                     <IMU id={id} type="side"></IMU>
                 </div>
 
-                <Battery id={id} active={active} color={color}></Battery>
+                <Battery id={id} active={active}></Battery>
             </div>
             
             <SimpleBar style={{ maxHeight: 600 }}>
