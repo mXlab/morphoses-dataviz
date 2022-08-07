@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "admin": "concurrently \"npm run server\" \"npm run pack\"",
     "server": "tsc server/index.ts --outDir dist --esModuleInterop && node dist/index.js",
-    "pack": "concurrently \"node tasks/copyViews\" \"npx webpack\" \"node-sass -w -r src/sass/main.scss -o dist/public\""
+    "pack": "concurrently \"node tasks/copyViews\" \"npx webpack\" \"node-sass -r src/sass/main.scss -o dist/public && node-sass -w -r src/sass/main.scss -o dist/public\""
   },
   "repository": {
     "type": "git",
