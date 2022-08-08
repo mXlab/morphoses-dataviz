@@ -22,9 +22,9 @@ const Controls = (props) => {
                         </Widget>
 
                         <Widget name="M.Rotation" tag={id} param="mrot" size={3}>
-                            <Value param={`${id} mrot`} subparam="x" label="X" range={{min:-180, max:180}} />
-                            <Value param={`${id} mrot`} subparam="y" label="Y" range={{min:-180, max:180}} />
-                            <Value param={`${id} mrot`} subparam="z" label="Z" range={{min:-180, max:180}} />
+                            <Value param={`${id} mrot`} subparam="x" label="X" isAngle range={{min:-180, max:180}} />
+                            <Value param={`${id} mrot`} subparam="y" label="Y" isAngle range={{min:-180, max:180}} />
+                            <Value param={`${id} mrot`} subparam="z" label="Z" isAngle range={{min:-180, max:180}} />
                         </Widget>
 
                         <Widget name="M.Quaternion" tag={id} param="mquat">
@@ -35,9 +35,9 @@ const Controls = (props) => {
                         </Widget>
 
                         <Widget name="S.Rotation" tag={id} param="rot">
-                            <Value param={`${id} rot`} subparam="x" label="X" range={{min:-180, max:180}} />
-                            <Value param={`${id} rot`} subparam="y" label="Y" range={{min:-180, max:180}} />
-                            <Value param={`${id} rot`} subparam="z" label="Z" range={{min:-180, max:180}} />
+                            <Value param={`${id} rot`} subparam="x" label="X" isAngle range={{min:-180, max:180}} />
+                            <Value param={`${id} rot`} subparam="y" label="Y" isAngle range={{min:-180, max:180}} />
+                            <Value param={`${id} rot`} subparam="z" label="Z" isAngle range={{min:-180, max:180}} />
                         </Widget>
 
                         <Widget name="S.Quaternion" tag={id} param="quat">

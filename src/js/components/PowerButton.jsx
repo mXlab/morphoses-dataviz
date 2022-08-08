@@ -1,4 +1,4 @@
-import React, { useCallback, forwardRef, useImperativeHandle, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import EventManager from '../managers/EventManager';
 import PowerIconSVG from '../../assets/power_icon.svg';
 
@@ -17,4 +17,4 @@ const PowerButton = ({ id, initActive = false }, ref) => {
     );
 };
 
-export default forwardRef(PowerButton);
+export default PowerButton;

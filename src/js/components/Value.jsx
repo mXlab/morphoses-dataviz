@@ -4,11 +4,16 @@ import Lop from './Lop';
 import React, { useState, useReducer, useRef, useEffect, useCallback } from "react";
 import classNames from "classnames";
 
-const Value = ({ param, subparam, label, disabled, smooth = 250, initial = 0, precision = 3, range = { min: 0, max: 1 } }) => {
+const Value = ({ param, subparam, label, disabled, isAngle = false, smooth = 250, initial = 0, precision = 3, range = { min: 0, max: 1 } }) => {
     // using reducer to improve performance and issues w/ heap size incrementing over time
     const reducer = (oldValue, newValue) => newValue;
+
     const [value, dispatchValue] = useReducer(reducer, initial);
+    const [secondValue, dispatchSecondValue] = useReducer(reducer, initial);
+
     const [lop] = useState(() => new Lop(smooth, initial));
+    const [secondLop] = useState(() => new Lop(smooth, initial));
+    
     // simple stuff LOL
     const [showGraph, setShowGraph] = useState(false);
 
@@ -20,27 +25,52 @@ const Value = ({ param, subparam, label, disabled, smooth = 250, initial = 0, pr
     // update callback :33
     const onUpdate = useCallback(args => {
         if (disabled) return;
+        
+        let v;
+        if (isAngle) {
+            // convert to cartesian value
+            const x = Math.cos(parseFloat(subparam ? args[subparam] : args) * Math.PI / 180);
+            const y = Math.sin(parseFloat(subparam ? args[subparam] : args) * Math.PI / 180);
 
-        // parse value to float (since it's apparently a string when received here)
-        // also make up for the presence of a subparam or not
-        const v = parseFloat(subparam ? args[subparam] : args);
+            // set values
+            lop.set(x);
+            secondLop.set(y);
+        } else {
+            v = parseFloat(subparam ? args[subparam] : args);
+            lop.set(v);
+        }
 
         // set LP value (state set in callback below)
-        lop.set(v);
     }, [param]);
 
 
     // on mount (we only do this once...)
     useEffect(() => {
+        // for single value OR x coord of angle
         lop.setCallback(v => {
-            const rounded = parseFloat(v.toFixed(precision));
+            const roundV = parseFloat(v.toFixed(precision));
 
             // update
-            dispatchValue(rounded);
-            if (graphRef.current)
-                graphRef.current.addValue(rounded);
+            dispatchValue(roundV);
+            if (graphRef.current && !isAngle) {
+                graphRef.current.addValue(roundV);
+            }
         });
-    }, [param]);
+
+        // for y coord of angle only
+        if (isAngle) {
+            secondLop.setCallback(v => {
+                const roundY = parseFloat(v.toFixed(precision));
+                dispatchSecondValue(roundY);
+
+                // graph added in render function
+            });
+        };
+    }, [isAngle]);
+
+    // useEffect(() => {
+        
+    // }, [isAngle ? value : secondValue]);
 
 
     // enable/disable data update
@@ -71,7 +101,12 @@ const Value = ({ param, subparam, label, disabled, smooth = 250, initial = 0, pr
         <div className={valueClass} data-key={param} data-disabled={disabled}>
             { label ? <span className="value__label">{label}</span> : null }
             <div className="value__container">
-                <span className="value__number">{value}</span>
+                <span className="value__number">
+                    {isAngle ? (() => {
+                        const theta = parseFloat((Math.atan2(secondValue, value) * 180 / Math.PI).toFixed(precision));
+                        if (graphRef.current) graphRef.current.addValue(theta);
+                        return theta;
+                    })() : value}</span>
                 {graph}
             </div>
 

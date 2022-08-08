@@ -13,13 +13,17 @@ const Robot = ({
     // reducer
     const reducer = (oldValue, newValue) => newValue;
     // states
-    const [posX, setPosX]               = useReducer(reducer, 0);
-    const [posY, setPosY]               = useReducer(reducer, 0);
-    const [mrz,  setMrz]                = useReducer(reducer, 0);
+    const [posX,    setPosX]            = useReducer(reducer, 0);
+    const [posY,    setPosY]            = useReducer(reducer, 0);
+    const [thetaX,  setThetaX]          = useReducer(reducer, 0);
+    const [thetaY,  setThetaY]          = useReducer(reducer, 0);
+
     // lops
     const [lopX]                        = useState(() => new Lop(500, 0));
     const [lopY]                        = useState(() => new Lop(500, 0));
-    const [lopMrz]                      = useState(() => new Lop(500, 0));
+    const [lopThetaX]                   = useState(() => new Lop(500, 0));
+    const [lopThetaY]                   = useState(() => new Lop(500, 0));
+
     // trail stuff
     const [trail]                       = useState(new RobotTrail(color));
     const [trailing, setTrailing]       = useState(true);
@@ -65,12 +69,15 @@ const Robot = ({
         });
 
         EventManager.plug(`${id} mrot`, ({z:mrz}) => {
-            lopMrz.set(mrz);
+            const theta = mrz * Math.PI / 180;
+            lopThetaX.set(Math.cos(theta));
+            lopThetaY.set(Math.sin(theta))
         });
         
         lopX.setCallback(setPosX);
         lopY.setCallback(setPosY);
-        lopMrz.setCallback(setMrz);
+        lopThetaX.setCallback(setThetaX);
+        lopThetaY.setCallback(setThetaY);
     }, [id]);// <---- only do this once!
 
 
@@ -85,7 +92,7 @@ const Robot = ({
         };
         const widgetStyle = {
             color: color,
-            transform: `translate(-50%, -50%) rotate(${((360 - mrz) + 90) % 360}deg)`
+            transform: `translate(-50%, -50%) rotate(${Math.atan2(thetaY, thetaX) + (Math.PI / 2)}rad)`
         };
 
         return (

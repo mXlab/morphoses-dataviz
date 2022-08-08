@@ -20,7 +20,7 @@ export const processRobotData = (robotId: Number, msg: OscMessage) => {
         case '/battery':
         {
             const [battery] = msg.args;
-            SocketManager.emit(`${robotTag} battery`, battery);
+            SocketManager.emit(`${robotTag} battery`, parseFloat(battery));
             break;
         }
         
